@@ -1,392 +1,421 @@
-import React, { useState, useEffect, useRef, useCallback, useReducer } from 'react';
+import {
+    useEffect,
+    useRef,
+    useCallback,
+    useReducer,
+    useState,
+} from "react";
 
-const App = () => {
-    const [gameState, dispatch] = useReducer((state, action) => {
-        switch (action.type) {
-            case 'LOSE_HEART':
-                const newHearts = Math.max(0, state.hearts - 1);
-                return {
-                    ...state,
-                    hearts: newHearts,
-                    gameOver: newHearts === 0
-                };
-            case 'CORRECT_ANSWER':
-                const newScore = state.score + 1;
-                const newQuestionIndex = state.questionIndex + 1;
-                const won = newQuestionIndex >= 3;
-                return {
-                    ...state,
-                    score: newScore,
-                    questionIndex: newQuestionIndex,
-                    won: won,
-                    gameOver: won
-                };
-            case 'RESTART':
-                return {
-                    hearts: 4,
-                    score: 0,
-                    questionIndex: 0,
-                    gameOver: false,
-                    won: false
-                };
-            default:
-                return state;
+/* -------------------- GAME STATE -------------------- */
+
+const INITIAL_STATE = {
+    hearts: 4,
+    score: 0,
+    questionIndex: 0,
+    gameOver: false,
+    won: false,
+};
+
+function reducer(state, action) {
+    switch (action.type) {
+        case "LOSE_HEART": {
+            const hearts = Math.max(0, state.hearts - 1);
+            return { ...state, hearts, gameOver: hearts === 0 };
         }
-    }, {
-        hearts: 4,
-        score: 0,
-        questionIndex: 0,
-        gameOver: false,
-        won: false
-    });
+
+        case "CORRECT_ANSWER": {
+            const nextIndex = state.questionIndex + 1;
+            const won = nextIndex >= QUESTIONS.length;
+            return {
+                ...state,
+                score: state.score + 1,
+                questionIndex: nextIndex,
+                won,
+                gameOver: won,
+            };
+        }
+
+        case "RESTART":
+            return INITIAL_STATE;
+
+        default:
+            return state;
+    }
+}
+
+/* -------------------- QUESTIONS -------------------- */
+const QUESTIONS = [
+    {
+        q: "What is 2 + 2?",
+        options: { A: "3", B: "4", C: "5", D: "6" },
+        correct: "B",
+    },
+    {
+        q: "Capital of France?",
+        options: { A: "Berlin", B: "Madrid", C: "Paris", D: "Rome" },
+        correct: "C",
+    },
+    {
+        q: "Largest planet?",
+        options: { A: "Earth", B: "Mars", C: "Venus", D: "Jupiter" },
+        correct: "D",
+    },
+];
+
+/* -------------------- PLATFORMS -------------------- */
+const PLATFORMS = [
+    { x: 0, y: 450, width: 800, height: 50, color: "#8B4513" },
+    { x: 150, y: 250, width: 60, height: 40, color: "#FFD700", letter: "A" },
+    { x: 270, y: 250, width: 60, height: 40, color: "#FFD700", letter: "B" },
+    { x: 390, y: 250, width: 60, height: 40, color: "#FFD700", letter: "C" },
+    { x: 510, y: 250, width: 60, height: 40, color: "#FFD700", letter: "D" },
+];
+
+/* -------------------- COMPONENT -------------------- */
+export default function Mario() {
+    const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
+    const [selectedOption, setSelectedOption] = useState(null);
 
     const canvasRef = useRef(null);
     const keysRef = useRef({});
+    const lastHitRef = useRef(null);
+
+    const bgRef = useRef(null);
+
+    useEffect(() => {
+        const bg = new Image();
+        bg.src = "/assets/png&gif/gif/rock&grass.gif";
+        bgRef.current = bg;
+    }, []);
+
     const playerRef = useRef({
-        x: 50, y: 360, width: 30, height: 40, vx: 0, vy: 0, onGround: true
+        x: 50,
+        y: 330,
+        width: 30,
+        height: 60,
+        vx: 0,
+        vy: 0,
+        onGround: true,
     });
-    const lastBlockHitRef = useRef(null);
-    // ✅ SHAKE EFFECT
-    const shakeRef = useRef({ active: false, time: 0, duration: 300, intensity: 12 });
 
-    const questions = [
-        { q: "What is 2+2? (Hit B)", correct: 'B' },
-        { q: "Capital of France? (Hit C)", correct: 'C' },
-        { q: "Largest planet? (Hit D)", correct: 'D' }
-    ];
+    const charImage = new Image();
+    charImage.src = "/assets/png&gif/gif/boy.gif";
 
-    const platforms = [
-        { x: 0, y: 450, width: 800, height: 50, color: '#8B4513', letter: '' },
-        { x: 150, y: 320, width: 60, height: 40, color: '#FFD700', letter: 'A' },
-        { x: 270, y: 320, width: 60, height: 40, color: '#FFD700', letter: 'B' },
-        { x: 390, y: 320, width: 60, height: 40, color: '#FFD700', letter: 'C' },
-        { x: 510, y: 320, width: 60, height: 40, color: '#FFD700', letter: 'D' }
-    ];
+    const characterRef = useRef(null);
 
-    const getQuestionText = () => {
-        if (gameState.won) return '🎉 You Win! Quiz Complete! 🎉';
-        if (gameState.gameOver && !gameState.won) return '💀 Game Over! Click Restart!';
-        return questions[gameState.questionIndex]?.q || questions[0].q;
-    };
+    useEffect(() => {
+        const img = new Image();
+        img.src = "/assets/png&gif/gif/boy.gif";
+        characterRef.current = img;
+    }, []);
+    // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-    // ✅ IMPROVED COLLISION - Separate X/Y movement
-    const checkCollision = (rect1, rect2) => {
-        return rect1.x < rect2.x + rect2.width &&
-            rect1.x + rect1.width > rect2.x &&
-            rect1.y < rect2.y + rect2.height &&
-            rect1.y + rect1.height > rect2.y;
-    };
+    const shakeRef = useRef({
+        active: false,
+        time: 0,
+        duration: 300,
+        intensity: 12,
+    });
 
+    const question =
+        QUESTIONS[state.questionIndex] || QUESTIONS[0];
+
+    /* -------------------- HELPERS -------------------- */
+    const collide = (a, b) =>
+        a.x < b.x + b.width &&
+        a.x + a.width > b.x &&
+        a.y < b.y + b.height &&
+        a.y + a.height > b.y;
+
+    /* -------------------- UPDATE GAME -------------------- */
     const updateGame = useCallback(() => {
-        if (gameState.gameOver || gameState.won) return;
+        if (state.gameOver || state.won) return;
 
-        const player = playerRef.current;
+        const p = playerRef.current;
         const keys = keysRef.current;
 
-        // ✅ SHAKE UPDATE
+        // Screen shake update
         if (shakeRef.current.active) {
-            shakeRef.current.time += 16; // ~60fps
+            shakeRef.current.time += 16;
             if (shakeRef.current.time > shakeRef.current.duration) {
                 shakeRef.current.active = false;
             }
         }
 
-        // ✅ SEPARATE X/Y MOVEMENT - Prevents tunneling
-        const oldX = player.x;
-        const oldY = player.y;
+        const prevX = p.x;
+        const prevY = p.y;
 
-        // Horizontal movement first
-        player.vx *= 0.85; // Friction
-        if (keys.ArrowLeft || keys.a || keys.A) player.vx = Math.max(player.vx - 0.5, -6);
-        if (keys.ArrowRight || keys.d || keys.D) player.vx = Math.min(player.vx + 0.5, 6);
+        // Horizontal
+        p.vx *= 0.85;
+        if (keys.ArrowLeft || keys.a) p.vx = Math.max(p.vx - 0.5, -6);
+        if (keys.ArrowRight || keys.d) p.vx = Math.min(p.vx + 0.5, 6);
+        p.x += p.vx;
 
-        player.x += player.vx;
-
-        // Check horizontal collisions
-        for (let plat of platforms) {
-            if (checkCollision(player, plat)) {
-                // Hit from left
-                if (player.vx > 0 && oldX + player.width <= plat.x) {
-                    player.x = plat.x - player.width;
-                    player.vx = 0;
-                }
-                // Hit from right
-                else if (player.vx < 0 && oldX >= plat.x + plat.width) {
-                    player.x = plat.x + plat.width;
-                    player.vx = 0;
+        PLATFORMS.forEach((pl) => {
+            if (collide(p, pl)) {
+                if (p.vx > 0 && prevX + p.width <= pl.x) {
+                    p.x = pl.x - p.width;
+                    p.vx = 0;
+                } else if (p.vx < 0 && prevX >= pl.x + pl.width) {
+                    p.x = pl.x + pl.width;
+                    p.vx = 0;
                 }
             }
+        });
+
+        // Vertical
+        if ((keys.ArrowUp || keys.w || keys[" "]) && p.onGround) {
+            p.vy = -16;
+            p.onGround = false;
         }
 
-        // Vertical movement second
-        if ((keys.ArrowUp || keys.w || keys.W || keys[' ']) && player.onGround) {
-            player.vy = -16;
-            player.onGround = false;
-        }
+        p.vy += 0.9;
+        p.y += p.vy;
+        p.onGround = false;
 
-        player.vy += 0.9; // Gravity
-        player.y += player.vy;
-
-        // Check vertical collisions
-        player.onGround = false;
-        for (let plat of platforms) {
-            if (checkCollision(player, plat)) {
-                // Land from above
-                if (player.vy > 0 && oldY + player.height <= plat.y) {
-                    player.y = plat.y - player.height;
-                    player.vy = 0;
-                    player.onGround = true;
-                }
-                // Hit from below (cannot jump through!)
-                else if (player.vy < 0 && oldY >= plat.y + plat.height) {
-                    player.y = plat.y + plat.height;
-                    player.vy = 0;
+        PLATFORMS.forEach((pl) => {
+            if (collide(p, pl)) {
+                if (p.vy > 0 && prevY + p.height <= pl.y) {
+                    p.y = pl.y - p.height;
+                    p.vy = 0;
+                    p.onGround = true;
+                } else if (p.vy < 0 && prevY >= pl.y + pl.height) {
+                    p.y = pl.y + pl.height;
+                    p.vy = 0;
                 }
 
-                // ✅ FIXED: Block interaction - TRIGGERS ON ANY COLLISION!
-                if (plat.letter && lastBlockHitRef.current !== plat.letter) {
-                    lastBlockHitRef.current = plat.letter;
+                // Block hit logic
+                if (pl.letter && lastHitRef.current !== pl.letter) {
+                    lastHitRef.current = pl.letter;
+                    setSelectedOption(pl.letter);
 
-                    const correct = plat.letter === questions[gameState.questionIndex].correct;
-                    if (correct) {
-                        dispatch({ type: 'CORRECT_ANSWER' });
+                    if (pl.letter === question.correct) {
+                        dispatch({ type: "CORRECT_ANSWER" });
                     } else {
-                        // ✅ WRONG ANSWER → SCREEN SHAKE!
-                        dispatch({ type: 'LOSE_HEART' });
-                        shakeRef.current = { active: true, time: 0, duration: 300, intensity: 12 };
+                        dispatch({ type: "LOSE_HEART" });
+                        shakeRef.current = {
+                            active: true,
+                            time: 0,
+                            duration: 300,
+                            intensity: 12,
+                        };
                     }
 
                     setTimeout(() => {
-                        lastBlockHitRef.current = null;
+                        lastHitRef.current = null;
+                        setSelectedOption(null);
                     }, 800);
                 }
             }
-        }
+        });
 
-        // Screen boundaries
-        if (player.x < 0) player.x = 0;
-        if (player.x + 30 > 800) player.x = 770;
-        if (player.y > 500) {
-            player.y = 360;
-            player.vy = 0;
-            dispatch({ type: 'LOSE_HEART' });
+        if (p.y > 500) {
+            p.y = 360;
+            p.vy = 0;
+            dispatch({ type: "LOSE_HEART" });
         }
-    }, [gameState.gameOver, gameState.won, gameState.questionIndex]);
+    }, [state.gameOver, state.won, state.questionIndex]);
 
+    /* -------------------- DRAW GAME -------------------- */
     const drawGame = useCallback((ctx) => {
         ctx.save();
 
-        // ✅ SCREEN SHAKE EFFECT
+        // Screen shake
         if (shakeRef.current.active) {
-            const progress = shakeRef.current.time / shakeRef.current.duration;
-            const shakeX = (Math.random() - 0.5) * shakeRef.current.intensity * (1 - progress);
-            const shakeY = (Math.random() - 0.5) * shakeRef.current.intensity * (1 - progress);
-            ctx.translate(shakeX, shakeY);
+            const s = shakeRef.current;
+            const t = s.time / s.duration;
+            ctx.translate(
+                (Math.random() - 0.5) * s.intensity * (1 - t),
+                (Math.random() - 0.5) * s.intensity * (1 - t)
+            );
         }
 
         ctx.clearRect(0, 0, 800, 500);
 
-        // Sky gradient
-        const gradient = ctx.createLinearGradient(0, 0, 0, 500);
-        gradient.addColorStop(0, '#87CEEB');
-        gradient.addColorStop(0.6, '#98D8C8');
-        gradient.addColorStop(1, '#4A7C59');
-        ctx.fillStyle = gradient;
-        ctx.fillRect(0, 0, 800, 500);
+        // Background 
+        // const bg = ctx.createLinearGradient(0, 0, 0, 500);
+        // bg.addColorStop(0, "#87CEEB");
+        // bg.addColorStop(1, "#4A7C59");
+        // ctx.fillStyle = bg;
+        // ctx.fillRect(0, 0, 800, 500);
 
-        // Platforms with collision visualization
-        platforms.forEach(plat => {
-            ctx.fillStyle = plat.color;
-            ctx.fillRect(plat.x, plat.y, plat.width, plat.height);
 
-            if (plat.letter) {
-                // Active block glow (recently hit)
-                if (lastBlockHitRef.current === plat.letter) {
-                    ctx.shadowColor = shakeRef.current.active ? '#FF6B6B' : '#FFD700';
-                    ctx.shadowBlur = shakeRef.current.active ? 40 : 20;
-                } else {
-                    ctx.shadowColor = '#FFD700';
-                    ctx.shadowBlur = 20;
-                }
+        const bg = bgRef.current;
+        if (bg) {
+            ctx.drawImage(bg, 0, 0, 800, 500);
+        }
 
-                ctx.fillStyle = '#FFF';
-                ctx.font = 'bold 32px Arial';
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-                ctx.fillText(plat.letter, plat.x + 30, plat.y + 20);
-                ctx.shadowBlur = 0;
 
-                ctx.fillStyle = '#000';
-                ctx.fillText(plat.letter, plat.x + 30, plat.y + 20);
+        PLATFORMS.forEach((pl) => {
+            ctx.fillStyle = pl.color;
+            ctx.fillRect(pl.x, pl.y, pl.width, pl.height);
+            if (pl.letter) {
+                ctx.fillStyle = "#fff";
+                ctx.font = "bold 28px Arial";
+                ctx.textAlign = "center";
+                ctx.textBaseline = "middle";
+                ctx.fillText(pl.letter, pl.x + 30, pl.y + 20);
             }
         });
 
-        // Enhanced Mario sprite
-        const player = playerRef.current;
-        ctx.save();
-        ctx.translate(player.x + 15, player.y + 20);
+        const p = playerRef.current;
+        // ctx.fillStyle = "#FF6B6B";
+        // ctx.fillRect(p.x, p.y, 30, 70);
+        const img = characterRef.current;
+        if (img) {
+            // ctx.drawImage(img, p.x, p.y, 40, 40);
+            const scale = 1.5;
 
-        // Mustache
-        ctx.fillStyle = '#8B4513';
-        ctx.fillRect(-6, 0, 12, 4);
-
-        // Hat
-        ctx.fillStyle = '#8B0000';
-        ctx.fillRect(-11, -20, 22, 12);
-        ctx.fillStyle = '#FF0000';
-        ctx.fillRect(-9, -18, 18, 8);
-
-        // Face
-        ctx.fillStyle = '#FDBCB4';
-        ctx.fillRect(-10, -8, 20, 12);
-
-        // Eyes
-        ctx.fillStyle = '#000';
-        ctx.fillRect(-7, -5, 2, 3);
-        ctx.fillRect(-1, -5, 2, 3);
-
-        // Body
-        ctx.fillStyle = '#FF6B6B';
-        ctx.fillRect(-15, -10, 30, 30);
-
-        // Buttons
-        ctx.fillStyle = '#FFD700';
-        ctx.fillRect(-5, 2, 4, 4);
-        ctx.fillRect(1, 2, 4, 4);
-
-        // Arms
-        ctx.fillStyle = '#FF6B6B';
-        ctx.fillRect(-14, 0, 6, 12);
-        ctx.fillRect(8, 0, 6, 12);
-
-        // Legs
-        ctx.fillRect(-8, 18, 8, 8);
-        ctx.fillRect(0, 18, 8, 8);
-
-        // Shoes
-        ctx.fillStyle = '#8B4513';
-        ctx.fillRect(-9, 22, 9, 6);
-        ctx.fillRect(0, 22, 9, 6);
-
-        ctx.restore();
-
-        // Glowing UI
-        ctx.fillStyle = '#FF0000';
-        ctx.font = 'bold 28px Arial';
-        ctx.textAlign = 'left';
-        ctx.textBaseline = 'top';
-        ctx.shadowColor = '#FF0000';
-        ctx.shadowBlur = 20;
-        ctx.fillText(`♥ ${gameState.hearts}`, 20, 40);
-        ctx.shadowBlur = 0;
-
-        ctx.fillStyle = '#FFD700';
-        ctx.shadowColor = '#FFD700';
-        ctx.shadowBlur = 20;
-        ctx.fillText(`⭐ ${gameState.score}/3`, 20, 75);
-        ctx.shadowBlur = 0;
-
-        // Game Over/Win overlay
-        if (gameState.gameOver && !gameState.won) {
-            ctx.fillStyle = 'rgba(0,0,0,0.95)';
-            ctx.fillRect(0, 0, 800, 500);
-            ctx.fillStyle = '#FFF';
-            ctx.font = 'bold 64px Arial';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillText('GAME OVER', 400, 240);
-            ctx.font = 'bold 36px Arial';
-            ctx.fillText('No Hearts Left!', 400, 300);
-        } else if (gameState.won) {
-            ctx.fillStyle = 'rgba(0,255,0,0.98)';
-            ctx.fillRect(0, 0, 800, 500);
-            ctx.fillStyle = '#FFF';
-            ctx.font = 'bold 64px Arial';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillText('PERFECT!', 400, 240);
-            ctx.font = 'bold 36px Arial';
-            ctx.fillText('Quiz Master! 🎉', 400, 300);
+            ctx.drawImage(
+                img,
+                p.x,
+                p.y,
+                40 * scale,
+                40 * scale
+            );
         }
 
+        ctx.save();
+        ctx.translate(p.x + 20, p.y);
+        ctx.scale(p.vx < 0 ? -1 : 1, 1);
+        // ctx.drawImage(img, -20, 0, 40, 40);
         ctx.restore();
-    }, [gameState.hearts, gameState.score, gameState.gameOver, gameState.won, lastBlockHitRef]);
 
+
+
+        // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        // ctx.drawImage(/assets/png & gif / gif / boy.gif,)
+
+        ctx.restore();
+    }, []);
+
+    /* -------------------- LOOP -------------------- */
     useEffect(() => {
-        const canvas = canvasRef.current;
-        if (!canvas) return;
-        const ctx = canvas.getContext('2d');
-        let animationId;
-
-        const gameLoop = () => {
+        const ctx = canvasRef.current.getContext("2d");
+        let id;
+        const loop = () => {
             updateGame();
             drawGame(ctx);
-            animationId = requestAnimationFrame(gameLoop);
+            id = requestAnimationFrame(loop);
         };
-        gameLoop();
-
-        return () => {
-            if (animationId) cancelAnimationFrame(animationId);
-        };
+        loop();
+        return () => cancelAnimationFrame(id);
     }, [updateGame, drawGame]);
 
+    /* -------------------- INPUT -------------------- */
     useEffect(() => {
-        const handleKeyDown = (e) => {
-            keysRef.current[e.code] = true;
-            keysRef.current[e.key.toLowerCase()] = true;
-            keysRef.current[e.key.toUpperCase()] = true;
-        };
-        const handleKeyUp = (e) => {
-            keysRef.current[e.code] = false;
-            keysRef.current[e.key.toLowerCase()] = false;
-            keysRef.current[e.key.toUpperCase()] = false;
-        };
-
-        window.addEventListener('keydown', handleKeyDown);
-        window.addEventListener('keyup', handleKeyUp);
+        const down = (e) => (keysRef.current[e.key] = true);
+        const up = (e) => (keysRef.current[e.key] = false);
+        window.addEventListener("keydown", down);
+        window.addEventListener("keyup", up);
         return () => {
-            window.removeEventListener('keydown', handleKeyDown);
-            window.removeEventListener('keyup', handleKeyUp);
+            window.removeEventListener("keydown", down);
+            window.removeEventListener("keyup", up);
         };
     }, []);
 
+    /* -------------------- RESTART -------------------- */
     const restartGame = () => {
-        dispatch({ type: 'RESTART' });
-        playerRef.current = { x: 50, y: 360, width: 30, height: 40, vx: 0, vy: 0, onGround: true };
-        lastBlockHitRef.current = null;
-        shakeRef.current = { active: false, time: 0, duration: 300, intensity: 12 };
+        dispatch({ type: "RESTART" });
+        playerRef.current = {
+            x: 50,
+            y: 330,
+            width: 30,
+            height: 60,
+            vx: 0,
+            vy: 0,
+            onGround: true,
+        };
+        lastHitRef.current = null;
+        shakeRef.current.active = false;
     };
 
+    /* -------------------- UI -------------------- */
     return (
-        <div className="game-container">
-            <h1 className="game-title">🍄 Mario Quiz Game</h1>
+        <div className="h-full flex justify-center gap-6 py-6 bg-[#0b1220]">
 
-            <div className="question">{getQuestionText()}</div>
+            {/* GAME AREA */}
+            <div className="flex flex-col items-start">
+                {/* Lifeline */}
+                <div className="flex gap-4 mb-3 text-white">
+                    <span className="px-3 py-1 bg-red-600/20 border border-red-500 rounded">
+                        ♥ {state.hearts}
+                    </span>
+                    <span className="px-3 py-1 bg-yellow-600/20 border border-yellow-500 rounded">
+                        ⭐ {state.score}/{QUESTIONS.length}
+                    </span>
+                </div>
 
-            <div className="stats">
-                <span className="hearts">♥ {gameState.hearts}</span>
-                <span className="score">⭐ {gameState.score}/3</span>
+                <div className="relative">
+                    <canvas
+                        ref={canvasRef}
+                        width="800"
+                        height="500"
+                        className="border border-blue-500/40 rounded-lg bg-black"
+                    />
+
+                    {/* GAME OVER */}
+                    {state.gameOver && !state.won && (
+                        <div className="absolute inset-0 bg-black/95 flex flex-col items-center justify-center text-white rounded-lg">
+                            <h1 className="text-5xl font-bold mb-4">GAME OVER</h1>
+                            <p className="mb-8 text-gray-300">No Hearts Left!</p>
+                            <button
+                                onClick={restartGame}
+                                className="px-6 py-3 bg-red-600 hover:bg-red-700 rounded"
+                            >
+                                🔄 Restart
+                            </button>
+                        </div>
+                    )}
+
+                    {/* WIN SCREEN */}
+                    {state.won && (
+                        <div className="absolute inset-0 bg-green-700/95 flex flex-col items-center justify-center text-white rounded-lg">
+                            <h1 className="text-5xl font-bold mb-4">
+                                🎉 CONGRATULATIONS!
+                            </h1>
+                            <p className="mb-8">
+                                You answered all questions correctly!
+                            </p>
+                            <div>
+                                <img src="/assets/png&gif/gif/celebrating.gif" alt="" />
+                            </div>
+                            <button
+                                onClick={restartGame}
+                                className="px-6 py-3 bg-white text-green-700 font-semibold rounded"
+                            >
+                                🔄 Play Again
+                            </button>
+                        </div>
+                    )}
+                </div>
             </div>
 
-            <canvas
-                ref={canvasRef}
-                width="800"
-                height="500"
-                className="game-canvas"
-                tabIndex={0}
-            />
+            {/* QUESTION PANEL */}
+            <div className="w-80 bg-[#0b1220] text-white p-5 rounded-xl border border-blue-500/40">
+                <h2 className="text-lg font-semibold mb-2">
+                    Question {state.questionIndex + 1}
+                </h2>
+                <p className="mb-4 text-gray-300">{question.q}</p>
 
-            <div className="controls">
-                🎮 Arrow Keys / WASD = Move | Space / ↑ = Jump | Wrong Answer = SCREEN SHAKE! 😱
+                {Object.entries(question.options).map(([k, v]) => {
+                    const correct = k === question.correct;
+                    const selected = k === selectedOption;
+
+                    return (
+                        <div
+                            key={k}
+                            className={`p-3 mb-2 rounded-md border
+                ${selected && correct && "bg-green-600/20 border-green-500"}
+                ${selected && !correct && "bg-red-600/20 border-red-500"}
+                ${!selected && "border-blue-500/30"}
+              `}
+                        >
+                            <strong>{k}.</strong> {v}
+                        </div>
+                    );
+                })}
             </div>
-
-            {gameState.gameOver && (
-                <button className="restart-btn" onClick={restartGame}>
-                    🔄 Play Again
-                </button>
-            )}
         </div>
     );
-};
-
-export default App;
+}

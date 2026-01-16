@@ -2,8 +2,6 @@ import { useState } from "react";
 import { Link } from 'react-router-dom';
 
 export default function Navbar() {
-    const [classDrop, setClassDrop] = useState(false);
-    const [practiceDrop, setPracticeDrop] = useState(false);
 
     return (
         <>
@@ -64,7 +62,7 @@ export default function Navbar() {
                         <div className="absolute left-0 top-full pt-2 hidden group-hover:block">
                             <div className="p-[2px] rounded-md bg-gradient-to-r from-[#B19EEF] via-[#B19EEF] to-[#B19EEF]">
                                 <ul className="w-56 bg-[#111a2e] rounded-md shadow-lg">
-                                    <li className="px-4 py-3 hover:bg-[#1a2540] hover:text-[#B19EEF]">Game 1</li>
+                                    <li className="px-4 py-3 hover:bg-[#1a2540] hover:text-[#B19EEF]"><Link to="/mario">Game 1</Link></li>
                                     <li className="px-4 py-3 hover:bg-[#1a2540] hover:text-[#B19EEF]">Game 2</li>
                                     <li className="px-4 py-3 hover:bg-[#1a2540] hover:text-[#B19EEF]">Game 3</li>
                                 </ul>

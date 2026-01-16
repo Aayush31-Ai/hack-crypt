@@ -7,6 +7,7 @@ import Testing from './components/Test/Testing.jsx'
 import Testing2 from './components/Test/Testing2.jsx'
 import Profile from './components/Profile/Profile.jsx'
 import Store from './components/Store/Store.jsx'
+import Mario from './games/mario.jsx'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -16,6 +17,7 @@ const router = createBrowserRouter(
         <Route path='/testing2' element={<Testing2 />} />
         <Route path='/profile' element={<Profile />} />
         <Route path='/store' element={<Store />} />
+        <Route path='/mario' element={<Mario />} />
       </Route>
     </>
   )
