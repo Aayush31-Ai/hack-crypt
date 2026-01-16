@@ -3,8 +3,6 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.jsx'
 import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from 'react-router-dom'
-import Testing from './components/Test/Testing.jsx'
-import Testing2 from './components/Test/Testing2.jsx'
 import Login from './components/Login.jsx'
 // import Home from './components/Home.jsx'
 import LandingPage from './components/home/LandingPage'
@@ -12,7 +10,6 @@ import World from './pages/World'
 import WorldDetail from './pages/WorldDetail'
 import QuizPage from './pages/QuizPage'
 import Leaderboard from './components/LeaderBoard/LeaderBoard'
-import BoardData from './components/LeaderBoard/BoardData'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
