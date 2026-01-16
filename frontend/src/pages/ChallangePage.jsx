@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Calendar, Users, Trophy, Flame, Star, Lock, ChevronRight } from 'lucide-react';
 import { useAuth } from '../context/useAuth';
+import CurrentUser from '../playerData/CurrentUser';
+import ChallengeQuiz from '../components/challange/ChallengeQuiz';
 
 // Weekly challenges organized by week
 const weeklySchedule = [
@@ -19,7 +21,7 @@ const weeklySchedule = [
         status: "completed",
         progress: 10,
         totalTasks: 10,
-        icon: "🐍",
+        image:"/assets/challange/c2.jpg",
         color: "from-blue-500 to-cyan-500",
         bgColor: "bg-blue-900/20",
         borderColor: "border-blue-500/30"
@@ -35,7 +37,7 @@ const weeklySchedule = [
         status: "completed",
         progress: 5,
         totalTasks: 5,
-        icon: "⚙️",
+        image:"/assets/challange/c3.jpg",
         color: "from-green-500 to-emerald-500",
         bgColor: "bg-green-900/20",
         borderColor: "border-green-500/30"
@@ -57,7 +59,7 @@ const weeklySchedule = [
         status: "completed",
         progress: 8,
         totalTasks: 8,
-        icon: "🔄",
+        image:"/assets/challange/c4.jpg",
         color: "from-purple-500 to-pink-500",
         bgColor: "bg-purple-900/20",
         borderColor: "border-purple-500/30"
@@ -73,7 +75,7 @@ const weeklySchedule = [
         status: "completed",
         progress: 12,
         totalTasks: 12,
-        icon: "📊",
+        image:"/assets/challange/c1.jpg",
         color: "from-orange-500 to-red-500",
         bgColor: "bg-orange-900/20",
         borderColor: "border-orange-500/30"
@@ -95,7 +97,7 @@ const weeklySchedule = [
         status: "active",
         progress: 3,
         totalTasks: 10,
-        icon: "⚡",
+        image:"/assets/challange/c4.jpg",
         color: "from-yellow-500 to-orange-500",
         bgColor: "bg-yellow-900/20",
         borderColor: "border-yellow-500/30"
@@ -111,7 +113,7 @@ const weeklySchedule = [
         status: "active",
         progress: 5,
         totalTasks: 15,
-        icon: "🧠",
+        image:"/assets/challange/c3.jpg",
         color: "from-purple-500 to-pink-500",
         bgColor: "bg-purple-900/20",
         borderColor: "border-purple-500/30"
@@ -127,7 +129,7 @@ const weeklySchedule = [
         status: "active",
         progress: 4,
         totalTasks: 7,
-        icon: "🔥",
+        image:"/assets/challange/c2.jpg",
         color: "from-orange-500 to-red-500",
         bgColor: "bg-orange-900/20",
         borderColor: "border-orange-500/30"
@@ -149,7 +151,7 @@ const weeklySchedule = [
         status: "locked",
         progress: 0,
         totalTasks: 6,
-        icon: "🔐",
+        image:"/assets/challange/c5.jpg",
         color: "from-indigo-500 to-purple-500",
         bgColor: "bg-indigo-900/20",
         borderColor: "border-indigo-500/30"
@@ -165,7 +167,7 @@ const weeklySchedule = [
         status: "locked",
         progress: 0,
         totalTasks: 10,
-        icon: "🐛",
+        image:"/assets/challange/c6.jpg",
         color: "from-red-500 to-pink-500",
         bgColor: "bg-red-900/20",
         borderColor: "border-red-500/30"
@@ -188,7 +190,7 @@ const monthlyChallenges = [
     progress: 15,
     totalTasks: 30,
     icon: "💪",
-    image: "/assets/png&gif/png/challenge-banner.png",
+    image: "/assets/challange/c1.jpg",
     color: "from-blue-500 to-cyan-500",
     bgColor: "bg-blue-900/20",
     borderColor: "border-cyan-500/50"
@@ -196,10 +198,11 @@ const monthlyChallenges = [
 ];
 
 const ChallengePage = () => {
-  const { user } = useAuth();
+  
   const [selectedChallenge, setSelectedChallenge] = useState(null);
-  const [userXP, setUserXP] = useState(user?.xp || 45680);
+  const [userXP, setUserXP] = useState(CurrentUser.xp);
   const [expandedWeek, setExpandedWeek] = useState("Week 3"); // Current week expanded by default
+  const [showQuiz, setShowQuiz] = useState(false);
 
   const handleStartChallenge = (challenge) => {
     if (challenge.status === 'locked') {
@@ -207,17 +210,27 @@ const ChallengePage = () => {
       return;
     }
     setSelectedChallenge(challenge);
-    // Navigate to challenge quiz page
+    setShowQuiz(true);
   };
 
-  const handleCompleteChallenge = (challenge) => {
-    // Update user XP
-    setUserXP(prevXP => prevXP + challenge.xpReward);
+  const handleQuizComplete = (score, percentage) => {
+    if (percentage >= 70 && selectedChallenge) {
+      // Update CurrentUser XP - this is already done in ChallengeQuiz
+      setUserXP(CurrentUser.xp);
+      
+      // Show success message with updated XP
+      alert(`🎉 Challenge Completed! +${selectedChallenge.xpReward} XP earned!\n\n✨ ${CurrentUser.name}'s Total XP: ${CurrentUser.xp}`);
+    } else if (percentage < 70) {
+      alert(`Try again! You scored ${percentage.toFixed(0)}%. Need 70% to pass.`);
+    }
     
-    // Show success notification
-    alert(`🎉 Challenge Completed! +${challenge.xpReward} XP earned!`);
-    
-    // Reset selection
+    // Close quiz
+    setShowQuiz(false);
+    setSelectedChallenge(null);
+  };
+
+  const handleCloseQuiz = () => {
+    setShowQuiz(false);
     setSelectedChallenge(null);
   };
 
@@ -242,8 +255,8 @@ const ChallengePage = () => {
         {/* Header */}
         <div className="mb-12">
           <div className="flex items-center gap-4 mb-6">
-            <div className="w-20 h-20 rounded-xl bg-gradient-to-br from-yellow-500 to-orange-500 flex items-center justify-center text-4xl shadow-[0_0_30px_rgba(251,191,36,0.3)]">
-              🏆
+            <div className="w-18 h-18 rounded-xl bg-gradient-to-br from-yellow-600 to-orange-500 flex items-center justify-center text-4xl shadow-[0_0_30px_rgba(251,191,36,0.3)]">
+              <img className="h-15" src="/assets/png&gif/png/coin-cropped.png" alt="coin" />
             </div>
             <div>
               <h1 className="text-5xl font-black mb-2">
@@ -290,7 +303,9 @@ const ChallengePage = () => {
             >
               <div className="grid md:grid-cols-2 gap-6 p-8">
                 {/* Left: Image Card */}
-                <div className="relative bg-gradient-to-br from-cyan-100 to-blue-200 rounded-2xl p-6 overflow-hidden">
+                <div 
+                style={{backgroundImage: `url(${challenge.image})`}}
+                className="relative bg-gradient-to-br object-cover bg-cover from-cyan-100 to-blue-200 rounded-2xl p-6 overflow-hidden">
                   {/* Month Badge */}
                   <div className="text-xs font-bold tracking-wider text-gray-700 mb-2">JANUARY 2026</div>
                   <h3 className="text-2xl font-black text-gray-900 mb-4">
@@ -308,7 +323,7 @@ const ChallengePage = () => {
                   <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-white/80 rounded-full text-xs font-bold text-gray-800">
                     DEADLINE SAT 1/31
                   </div>
-
+                            
                   {/* Decorative illustration */}
                   <div className="absolute -bottom-4 -right-4 opacity-20">
                     <div className="text-9xl">🏆</div>
@@ -350,16 +365,7 @@ const ChallengePage = () => {
                     </div>
                   </div>
 
-                  {/* Action Button */}
-                  <button
-                    onClick={() => handleStartChallenge(challenge)}
-                    className="w-full py-4 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold uppercase tracking-wide transform hover:scale-[1.02] transition-all shadow-[0_0_30px_rgba(6,182,212,0.3)] border-b-4 border-cyan-900"
-                  >
-                    <div className="flex items-center justify-center gap-3">
-                      <Trophy size={20} />
-                      Start Challenge (+{challenge.xpReward} XP)
-                    </div>
-                  </button>
+            
                 </div>
               </div>
             </div>
@@ -421,89 +427,74 @@ const ChallengePage = () => {
                         {weekData.challenges.map(challenge => (
                           <div
                             key={challenge.id}
-                            className={`group relative ${challenge.bgColor} ${challenge.borderColor} border rounded-2xl p-6 backdrop-blur-md transition-all duration-300 hover:border-opacity-100 hover:shadow-[0_0_30px_rgba(168,85,247,0.2)] ${
+                            className={`group relative ${challenge.bgColor} ${challenge.borderColor} border rounded-2xl overflow-hidden backdrop-blur-md transition-all duration-300 hover:border-opacity-100 hover:shadow-[0_0_30px_rgba(168,85,247,0.2)] ${
                               challenge.status === 'locked' ? 'opacity-60' : 'hover:-translate-y-1'
                             }`}
                           >
+                            {/* Background Image */}
+                            <div 
+                              className="absolute inset-0 bg-cover bg-center opacity-30 group-hover:opacity-40 transition-opacity duration-300 rounded-2xl"
+                              style={{backgroundImage: `url(${challenge.image})`}}
+                            ></div>
+
                             {/* Gradient overlay on hover */}
                             <div className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${challenge.color} opacity-0 group-hover:opacity-5 transition-opacity duration-300 -z-10`}></div>
 
-                            {/* Lock Overlay */}
-                            {challenge.status === 'locked' && (
-                              <div className="absolute top-3 right-3">
-                                <Lock size={20} className="text-gray-500" />
-                              </div>
-                            )}
+                            {/* Content with relative positioning */}
+                            <div className="relative p-6">
+                              {/* Lock Overlay */}
+                              {challenge.status === 'locked' && (
+                                <div className="absolute top-3 right-3">
+                                  <Lock size={20} className="text-gray-500" />
+                                </div>
+                              )}
 
-                            {/* Completed Badge */}
-                            {challenge.status === 'completed' && (
-                              <div className="absolute top-3 right-3">
-                                <div className="px-2 py-1 bg-green-900/30 border border-green-500/50 rounded-full text-xs text-green-400 font-semibold">
-                                  ✓ Done
+                              {/* Completed Badge */}
+                              {challenge.status === 'completed' && (
+                                <div className="absolute top-3 right-3">
+                                  <div className="px-2 py-1 bg-green-900/30 border border-green-500/50 rounded-full text-xs text-green-400 font-semibold">
+                                    ✓ Done
+                                  </div>
+                                </div>
+                              )}
+
+                              {/* Title */}
+                              <h3 className="text-lg font-bold text-white mb-2">
+                                {challenge.title}
+                              </h3>
+
+                              {/* Description */}
+                              <p className="text-sm text-gray-400 mb-4">{challenge.description}</p>
+
+                              {/* Footer */}
+                              <div className="flex justify-between items-center mb-4 text-xs text-gray-400">
+                                <div className="flex items-center gap-1">
+                                  <Users size={14} />
+                                  <span>{challenge.participants}</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <Star className="text-yellow-400 fill-yellow-400" size={14} />
+                                  <span className="font-bold text-yellow-400">+{challenge.xpReward} XP</span>
                                 </div>
                               </div>
-                            )}
 
-                            {/* Header */}
-                            <div className="flex justify-between items-start mb-4">
-                              <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${challenge.color} flex items-center justify-center text-2xl shadow-[0_0_20px_rgba(168,85,247,0.2)] group-hover:scale-110 transition-transform`}>
-                                {challenge.icon}
-                              </div>
-                              <span className={`text-xs font-semibold px-2 py-1 rounded-full ${getDifficultyColor(challenge.difficulty)} bg-white/10`}>
-                                {challenge.difficulty}
-                              </span>
+                              {/* Action Button */}
+                              <button
+                                onClick={() => handleStartChallenge(challenge)}
+                                disabled={challenge.status === 'locked'}
+                                className={`w-full py-3 rounded-lg font-semibold text-sm transition-all duration-300 ${
+                                  challenge.status === 'locked'
+                                    ? 'bg-gray-800 text-gray-500 cursor-not-allowed'
+                                    : challenge.status === 'completed'
+                                    ? 'bg-green-900/30 border border-green-500/50 text-green-400 hover:bg-green-900/50'
+                                    : 'bg-white/10 hover:bg-white/20 border border-white/20 hover:border-violet-400/50 text-white'
+                                }`}
+                              >
+                                {challenge.status === 'locked' ? '🔒 Locked' : 
+                                 challenge.status === 'completed' ? '✓ Completed' : 
+                                 'Start Challenge →'}
+                              </button>
                             </div>
-
-                            {/* Title */}
-                            <h3 className="text-lg font-bold text-white mb-2">
-                              {challenge.title}
-                            </h3>
-
-                            {/* Description */}
-                            <p className="text-sm text-gray-400 mb-4">{challenge.description}</p>
-
-                            {/* Progress */}
-                            <div className="mb-4">
-                              <div className="flex justify-between text-xs text-gray-400 mb-2">
-                                <span>Progress</span>
-                                <span>{challenge.progress}/{challenge.totalTasks}</span>
-                              </div>
-                              <div className="w-full h-2 bg-white/10 rounded-full overflow-hidden">
-                                <div
-                                  className={`h-full bg-gradient-to-r ${challenge.color} transition-all duration-500`}
-                                  style={{ width: `${(challenge.progress / challenge.totalTasks) * 100}%` }}
-                                ></div>
-                              </div>
-                            </div>
-
-                            {/* Footer */}
-                            <div className="flex justify-between items-center mb-4 text-xs text-gray-400">
-                              <div className="flex items-center gap-1">
-                                <Users size={14} />
-                                <span>{challenge.participants}</span>
-                              </div>
-                              <div className="flex items-center gap-2">
-                                <Star className="text-yellow-400 fill-yellow-400" size={14} />
-                                <span className="font-bold text-yellow-400">+{challenge.xpReward} XP</span>
-                              </div>
-                            </div>
-
-                            {/* Action Button */}
-                            <button
-                              onClick={() => handleStartChallenge(challenge)}
-                              disabled={challenge.status === 'locked'}
-                              className={`w-full py-3 rounded-lg font-semibold text-sm transition-all duration-300 ${
-                                challenge.status === 'locked'
-                                  ? 'bg-gray-800 text-gray-500 cursor-not-allowed'
-                                  : challenge.status === 'completed'
-                                  ? 'bg-green-900/30 border border-green-500/50 text-green-400 hover:bg-green-900/50'
-                                  : 'bg-white/10 hover:bg-white/20 border border-white/20 hover:border-violet-400/50 text-white'
-                              }`}
-                            >
-                              {challenge.status === 'locked' ? '🔒 Locked' : 
-                               challenge.status === 'completed' ? '✓ Completed' : 
-                               'Start Challenge →'}
-                            </button>
                           </div>
                         ))}
                       </div>
@@ -516,6 +507,15 @@ const ChallengePage = () => {
         </div>
 
       </div>
+
+      {/* Quiz Modal */}
+      {showQuiz && selectedChallenge && (
+        <ChallengeQuiz
+          challenge={selectedChallenge}
+          onComplete={handleQuizComplete}
+          onClose={handleCloseQuiz}
+        />
+      )}
     </div>
   );
 };
