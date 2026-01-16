@@ -4,10 +4,11 @@ import './index.css'
 import App from './App.jsx'
 import { BrowserRouter, createBrowserRouter, createRoutesFromElements, Route } from 'react-router-dom'
 import Testing from './components/Test/Testing.jsx'
+import Navbar from './components/Header/Navbar.jsx'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route path='/testing' element={<Testing />} />
+  
   )
 )
 
