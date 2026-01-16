@@ -10,17 +10,17 @@ import Login from './components/Login.jsx'
 import LandingPage from './components/home/LandingPage'
 import World from './pages/World'
 import WorldDetail from './pages/WorldDetail'
+import QuizPage from './pages/QuizPage'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
       <Route path='/' element={<App />}>
-        <Route path='/' element={<Testing />} />
-        <Route path='/testing' element={<Testing2 />} />
         <Route path="/login/:person" element={<Login />} />
-        <Route path="/home" element={<LandingPage />} />
+        <Route path="/" element={<LandingPage />} />
         <Route path="world" element={<World />} />
-           <Route path="/world/:worldId" element={<WorldDetail />} />
+          <Route path="/world/:worldId" element={<WorldDetail />} />
+          <Route path="/world/:worldId/zone/:zoneId/stage/:stageId" element={<QuizPage />} />
 
       </Route>
     </>

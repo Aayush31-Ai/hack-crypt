@@ -1,58 +1,23 @@
-import { useParams } from "react-router-dom";
-
-
-
-export const worldData = {
-  python: {
-    id: 1,
-    name: "Python",
-    description:
-      "Learn programming fundamentals such as variables, control flow, and loops using Python.",
-    zones: [
-      {
-        id: 1,
-        name: "Hello World",
-        stages: [
-          "Setting Up",
-          "Hello World",
-          "Patterns",
-          "Variables",
-        ],
-      },
-      {
-        id: 2,
-        name: "Variables",
-        stages: ["Numbers", "Strings", "Input"],
-      },
-      {
-        id: 3,
-        name: "Control Flow",
-        stages: ["If Else", "Conditions", "Logic"],
-      },
-    ],
-  },
-
-  javascript: {
-    id:2,
-    name: "JavaScript",
-    description:
-      "Learn JavaScript fundamentals for building modern web applications.",
-    zones: [
-      {
-        id: 1,
-        name: "Basics",
-        stages: ["Variables", "Data Types"],
-      },
-    ],
-  },
-};
-
-
-
+import { useNavigate, useParams } from "react-router-dom";
+import { worldData } from "../data/worldData";
+import { useEffect } from "react";
 
 const WorldDetail = () => {
   const { worldId } = useParams();
   const world = worldData[worldId];
+  const navigate = useNavigate();
+
+
+    useEffect(()=>{
+  window.scrollTo({top:0,behavior:"smooth"})
+    },[])
+  
+
+  // Calculate total stages and completed stages (mock data for now)
+  const totalStages = world?.zones.reduce((acc, zone) => acc + zone.stages.length, 0) || 0;
+  const completedStages = 2; // This should come from backend/state management
+  const totalXP = 350; // This should come from backend/state management
+  const completionPercentage = totalStages > 0 ? (completedStages / totalStages) * 100 : 0;
 
   if (!world) {
     return (
@@ -64,21 +29,28 @@ const WorldDetail = () => {
 
   return (
     <div className="min-h-screen bg-[#0B0F1A] text-white">
-
       {/* HERO SECTION */}
-      <div className="bg-gradient-to-r from-[#1a1f3c] to-[#0B0F1A] p-10">
+      <div
+      style={{backgroundImage: `url(${world.image})`, backgroundSize: 'cover', backgroundPosition: 'center'}}
+      className="bg-gradient-to-r from-[#1a1f3c] to-[#0B0F1A] p-10">
         <h1 className="text-5xl font-bold mb-4">{world.name}</h1>
-        <p className="text-gray-300 max-w-2xl">
-          {world.description}
-        </p>
-        <button className="mt-6 px-6 py-3 bg-[#B19EEF] text-black font-semibold rounded-lg">
+        <p className="text-gray-300 max-w-2xl">{world.description}</p>
+        <button 
+          onClick={() => {
+            const firstZone = world.zones[0];
+            const firstStage = firstZone?.stages[0];
+            if (firstZone && firstStage) {
+              navigate(`/world/${worldId}/zone/${firstZone.id}/stage/${firstStage.id}`);
+            }
+          }}
+          className="mt-6 px-6 py-3 bg-[#B19EEF] text-black font-semibold rounded-lg hover:bg-[#9d85e0] transition-colors cursor-pointer"
+        >
           Start Learning
         </button>
       </div>
 
       {/* MAIN CONTENT */}
       <div className="flex px-10 py-10 gap-10">
-
         {/* LEFT – MAP */}
         <div className="flex-1 space-y-6">
           {world.zones.map((zone, index) => (
@@ -93,11 +65,29 @@ const WorldDetail = () => {
               <div className="space-y-2">
                 {zone.stages.map((stage, i) => (
                   <div
-                    key={i}
+                    key={stage.id}
                     className="flex justify-between items-center bg-black/40 px-4 py-2 rounded-lg"
                   >
-                    <span>{stage}</span>
-                    <button className="text-sm px-3 py-1 bg-[#B19EEF]/20 border border-[#B19EEF]/40 rounded">
+                    <span>{stage.name}</span>
+                    {/* <button
+                      onClick={() =>
+                        navigate(
+                          `/world/${worldId}/zone/${zone.id}/stage/${zone.stages[i].id}`
+                        )
+                      }
+                      className="text-sm px-3 py-1 bg-[#B19EEF]/20 border border-[#B19EEF]/40 rounded"
+                    >
+                      Start
+                    </button> */}
+
+                    <button
+                      onClick={() =>
+                        navigate(
+                          `/world/${worldId}/zone/${zone.id}/stage/${zone.stages[i].id}`
+                        )
+                      }
+                      className="text-sm px-3 py-1 bg-[#B19EEF]/20 border border-[#B19EEF]/40 rounded hover:bg-[#B19EEF]/30 transition-colors cursor-pointer"
+                    >
                       Start
                     </button>
                   </div>
@@ -108,35 +98,42 @@ const WorldDetail = () => {
         </div>
 
         {/* RIGHT – USER PANEL */}
-        <div className="w-[320px] bg-white/5 border border-white/10 rounded-xl p-6 space-y-6">
-          <div>
-            <h3 className="font-semibold text-lg">Your Progress</h3>
-            <p className="text-gray-400 text-sm">Level 1 Beginner</p>
-          </div>
+        <div className="w-[320px] space-y-6">
+          {/* Course Progress Section */}
+          <div className="bg-white/5 border border-white/10 rounded-xl p-6 space-y-4">
+            <h3 className="font-semibold text-lg">Course Progress</h3>
+            
+            <div className="space-y-4">
+              {/* Completion Stats */}
+              <div className="bg-black/40 rounded-lg p-4">
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-sm text-gray-400">Levels Completed</span>
+                  <span className="text-2xl font-bold text-[#B19EEF]">{completedStages}/{totalStages}</span>
+                </div>
+                <div className="w-full h-2 bg-gray-700 rounded-full overflow-hidden">
+                  <div 
+                    className="h-full bg-gradient-to-r from-[#B19EEF] to-[#9d85e0] transition-all duration-500"
+                    style={{ width: `${completionPercentage}%` }}
+                  />
+                </div>
+                <p className="text-xs text-gray-400 mt-1">{completionPercentage.toFixed(0)}% Complete</p>
+              </div>
 
-          <div>
-            <p className="text-sm mb-1">XP Progress</p>
-            <div className="w-full h-2 bg-gray-700 rounded">
-              <div className="h-full w-1/3 bg-[#B19EEF]" />
+              {/* XP Stats */}
+              <div className="bg-black/40 rounded-lg p-4">
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-gray-400">Total XP Earned</span>
+                  <div className="flex items-center gap-2">
+                    <svg className="w-5 h-5 text-[#B19EEF]" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                    </svg>
+                    <span className="text-2xl font-bold text-[#B19EEF]">{totalXP}</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-
-          <div className="space-y-2 text-sm">
-            <div className="flex justify-between">
-              <span>Exercises</span>
-              <span>2 / 20</span>
-            </div>
-            <div className="flex justify-between">
-              <span>Projects</span>
-              <span>0</span>
-            </div>
-          </div>
-
-          <button className="w-full py-3 bg-[#B19EEF] text-black font-semibold rounded-lg">
-            Continue
-          </button>
         </div>
-
       </div>
     </div>
   );

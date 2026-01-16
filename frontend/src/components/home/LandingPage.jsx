@@ -52,7 +52,7 @@ const LandingPage = () => {
           </h1>
 
           {/* Subheading */}
-          <p className="text-lg md:text-2xl text-gray-300 mb-12 max-w-3xl mx-auto leading-relaxed font-light">
+          <p className="text-lg md:text-2xl bg-0b1320/60 text-gray-200 mb-12 max-w-3xl mx-auto leading-relaxed font-light">
             Master coding, math, science, and more through competitive arenas. 
             Battle bugs, solve puzzles, climb the leaderboard, and unlock legendary rewards.
           </p>

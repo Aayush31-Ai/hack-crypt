@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 const worlds = [
@@ -33,6 +33,10 @@ const worlds = [
 ];
 
 const Worlds = () => {
+
+  useEffect(()=>{
+window.scrollTo({top:0,behavior:"smooth"})
+  },[])
 
     const navigate=useNavigate()
   return (

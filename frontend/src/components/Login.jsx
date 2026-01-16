@@ -36,7 +36,7 @@ const Login = () => {
       });
 
       toast.success("Student logged in successfully 🚀");
-      navigate("/dashboard");
+      navigate("/world");
     }
 
     if (person === "teacher") {
@@ -60,7 +60,7 @@ const Login = () => {
       });
 
       toast.success("Teacher logged in successfully 👨‍🏫");
-      navigate("/dashboard");
+      navigate("/world");
     }
   };
 
