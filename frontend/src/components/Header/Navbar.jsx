@@ -34,7 +34,7 @@ export default function Navbar() {
                             <div className="p-[2px] rounded-md bg-gradient-to-r z-50 from-[#B19EEF] via-[#B19EEF] to-[#B19EEF]">
                                 <ul className="w-56 bg-[#111a2e] rounded-md shadow-lg z-50">
                                     <li className="px-4 py-3 hover:bg-[#1a2540] cursor-pointer hover:text-[#B19EEF]"><Link to="/leaderboard">LeaderBoard</Link></li>
-                                    <li className="px-4 py-3 hover:bg-[#1a2540] hover:text-[#B19EEF]">Challenges</li>
+                                    <li className="px-4 py-3 hover:bg-[#1a2540] hover:text-[#B19EEF]"><Link to="">Challenges</Link></li>
                                 </ul>
                             </div>
                         </div>
