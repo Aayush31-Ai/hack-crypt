@@ -5,7 +5,7 @@ export default function Navbar() {
 
     return (
         <>
-            <nav className="bg-[#0b1220] text-white px-6 py-4 flex items-center justify-around">
+            <nav className="bg-[#0b1220] text-white px-6 py-4 flex items-center justify-around overflow-visible relative z-50">
                 {/* Left: Logo */}
                 <div className="">
                     <img className="w-[200px] h-12 bg-none scale-125" src="/assets/png&gif/png/logo-purple.png" alt="" />
@@ -30,9 +30,9 @@ export default function Navbar() {
                                 </svg>
                             </div>
                         </div>
-                        <div className="absolute left-0 top-full pt-2 hidden group-hover:block">
-                            <div className="p-[2px] rounded-md bg-gradient-to-r from-[#B19EEF] via-[#B19EEF] to-[#B19EEF]">
-                                <ul className="w-56 bg-[#111a2e] rounded-md shadow-lg">
+                        <div className="absolute left-0 top-full pt-2 hidden group-hover:block z-50">
+                            <div className="p-[2px] rounded-md bg-gradient-to-r z-50 from-[#B19EEF] via-[#B19EEF] to-[#B19EEF]">
+                                <ul className="w-56 bg-[#111a2e] rounded-md shadow-lg z-50">
                                     <li className="px-4 py-3 hover:bg-[#1a2540] cursor-pointer hover:text-[#B19EEF]">LeaderBoard</li>
                                     <li className="px-4 py-3 hover:bg-[#1a2540] hover:text-[#B19EEF]">Challenges</li>
                                 </ul>
@@ -59,10 +59,10 @@ export default function Navbar() {
                             </div>
                         </div>
 
-                        <div className="absolute left-0 top-full pt-2 hidden group-hover:block">
-                            <div className="p-[2px] rounded-md bg-gradient-to-r from-[#B19EEF] via-[#B19EEF] to-[#B19EEF]">
-                                <ul className="w-56 bg-[#111a2e] rounded-md shadow-lg">
-                                    <li className="px-4 py-3 hover:bg-[#1a2540] hover:text-[#B19EEF]"><Link to="/mario">Game 1</Link></li>
+                        <div className="absolute left-0 top-full pt-2 hidden group-hover:block z-50">
+                            <div className="p-[2px] rounded-md bg-gradient-to-r from-[#B19EEF] via-[#B19EEF] to-[#B19EEF] z-50">
+                                <ul className="w-56 bg-[#111a2e] rounded-md shadow-lg z-50">
+                                    <li className="px-4 py-3 hover:bg-[#1a2540] hover:text-[#B19EEF]">Game 1</li>
                                     <li className="px-4 py-3 hover:bg-[#1a2540] hover:text-[#B19EEF]">Game 2</li>
                                     <li className="px-4 py-3 hover:bg-[#1a2540] hover:text-[#B19EEF]">Game 3</li>
                                 </ul>
@@ -93,7 +93,7 @@ export default function Navbar() {
                     </div>
                 </div>
             </nav>
-            <div className="border-b-4 border-[#B19EEF] shadow-2xl"></div>
+            <div className="border-b-2 border-[#B19EEF] shadow-2xl"></div>
         </>
     );
 }
