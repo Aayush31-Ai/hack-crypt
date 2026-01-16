@@ -5,13 +5,8 @@ import App from './App.jsx'
 import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from 'react-router-dom'
 import Profile from './components/Profile/Profile.jsx'
 import Store from './components/Store/Store.jsx'
-<<<<<<< HEAD
-import Mario from './games/mario.jsx'
-import Login from './components/Login.jsx'
-=======
 import Mario from './games/Mario.jsx'
 import Login from './components/Login'
->>>>>>> dd2890a695ba98f1769460bfd4c4f5363247eb9f
 import LandingPage from './components/home/LandingPage'
 import WorldDetail from './pages/WorldDetail'
 import QuizPage from './pages/QuizPage'
