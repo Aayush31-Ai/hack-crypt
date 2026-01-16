@@ -2,8 +2,6 @@ import { useState } from "react";
 import { Link } from 'react-router-dom';
 
 export default function Navbar() {
-    const [classDrop, setClassDrop] = useState(false);
-    const [practiceDrop, setPracticeDrop] = useState(false);
 
     return (
         <>
