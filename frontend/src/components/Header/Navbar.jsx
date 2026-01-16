@@ -13,7 +13,7 @@ export default function Navbar() {
             </div>
 
             {/* Center: Menu */}
-            <div className="flex justify-around w-52">
+            <div className="flex justify-between w-xl px-2">
                 <li className="relative group list-none">
                     <span className="cursor-pointer hover:text-blue-400">
                         ClassRoom
@@ -31,6 +31,20 @@ export default function Navbar() {
                 <li className="relative group list-none">
                     <span className="cursor-pointer hover:text-blue-400">
                         Practice
+                    </span>
+
+                    <div className="absolute left-0 top-full pt-2 hidden group-hover:block">
+                        <ul className="w-56 bg-[#111a2e] rounded-md shadow-lg">
+                            <li className="px-4 py-3 hover:bg-[#1a2540]">My Classes</li>
+                            <li className="px-4 py-3 hover:bg-[#1a2540]">Assignments</li>
+                            <li className="px-4 py-3 hover:bg-[#1a2540]">Students</li>
+                        </ul>
+                    </div>
+                </li>
+
+                <li className="relative group list-none">
+                    <span className="cursor-pointer hover:text-blue-400">
+                        Store
                     </span>
 
                     <div className="absolute left-0 top-full pt-2 hidden group-hover:block">
