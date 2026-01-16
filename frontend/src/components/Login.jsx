@@ -165,6 +165,17 @@ const Login = () => {
           )}
 
           {/* Login Button - Gamified */}
+
+
+          {person=="student" ?<button
+            onClick={handleLogin}
+            className="w-full mt-8 py-4 px-10 rounded-xl font-bold text-lg uppercase tracking-wider text-white bg-[#B19EEF] hover:bg-[#9B7FDE] transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-[0_0_40px_rgba(177,158,239,0.4)] border-b-4 border-[#8B6FCE] hover:border-[#7B5FBE] relative group overflow-hidden"
+          >
+            <span className="relative z-10 flex items-center justify-center gap-2">
+              ⚡ Enter  Battle ⚡
+            </span>
+            <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          </button> :
           <button
             onClick={handleLogin}
             className="w-full mt-8 py-4 px-10 rounded-xl font-bold text-lg uppercase tracking-wider text-white bg-[#B19EEF] hover:bg-[#9B7FDE] transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-[0_0_40px_rgba(177,158,239,0.4)] border-b-4 border-[#8B6FCE] hover:border-[#7B5FBE] relative group overflow-hidden"
@@ -174,6 +185,8 @@ const Login = () => {
             </span>
             <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
           </button>
+          }
+          
 
           {/* Decorative text */}
           <p className="text-center text-[#B19EEF]/50 text-xs mt-6 font-mono">
