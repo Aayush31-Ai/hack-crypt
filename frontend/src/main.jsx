@@ -5,6 +5,11 @@ import App from './App.jsx'
 import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from 'react-router-dom'
 import Testing from './components/Test/Testing.jsx'
 import Testing2 from './components/Test/Testing2.jsx'
+import Login from './components/Login.jsx'
+// import Home from './components/Home.jsx'
+import LandingPage from './components/home/LandingPage'
+import World from './pages/World'
+import WorldDetail from './pages/WorldDetail'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -12,6 +17,11 @@ const router = createBrowserRouter(
       <Route path='/' element={<App />}>
         <Route path='/' element={<Testing />} />
         <Route path='/testing' element={<Testing2 />} />
+        <Route path="/login/:person" element={<Login />} />
+        <Route path="/home" element={<LandingPage />} />
+        <Route path="world" element={<World />} />
+           <Route path="/world/:worldId" element={<WorldDetail />} />
+
       </Route>
     </>
   )
