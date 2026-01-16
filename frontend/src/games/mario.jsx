@@ -35,6 +35,16 @@ function reducer(state, action) {
             };
         }
 
+        case "WRONG_ANSWER": {
+            const nextIndex = state.questionIndex + 1;
+            const gameOver = nextIndex >= QUESTIONS.length || state.hearts === 0;
+            return {
+                ...state,
+                questionIndex: nextIndex,
+                gameOver,
+            };
+        }
+
         case "RESTART":
             return INITIAL_STATE;
 
@@ -49,16 +59,19 @@ const QUESTIONS = [
         q: "What is 2 + 2?",
         options: { A: "3", B: "4", C: "5", D: "6" },
         correct: "B",
+        explanation: "2 + 2 equals 4. This is basic addition.",
     },
     {
         q: "Capital of France?",
         options: { A: "Berlin", B: "Madrid", C: "Paris", D: "Rome" },
         correct: "C",
+        explanation: "Paris is the capital city of France, known for the Eiffel Tower.",
     },
     {
         q: "Largest planet?",
         options: { A: "Earth", B: "Mars", C: "Venus", D: "Jupiter" },
         correct: "D",
+        explanation: "Jupiter is the largest planet in our solar system.",
     },
 ];
 
@@ -75,6 +88,7 @@ const PLATFORMS = [
 export default function Mario() {
     const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
     const [selectedOption, setSelectedOption] = useState(null);
+    const [isCorrect, setIsCorrect] = useState(null);
 
     const canvasRef = useRef(null);
     const keysRef = useRef({});
@@ -190,8 +204,16 @@ export default function Mario() {
                     setSelectedOption(pl.letter);
 
                     if (pl.letter === question.correct) {
-                        dispatch({ type: "CORRECT_ANSWER" });
+                        setIsCorrect(true);
+                        // Show green for 1.5 seconds before moving to next question
+                        setTimeout(() => {
+                            dispatch({ type: "CORRECT_ANSWER" });
+                            lastHitRef.current = null;
+                            setSelectedOption(null);
+                            setIsCorrect(null);
+                        }, 1500);
                     } else {
+                        setIsCorrect(false);
                         dispatch({ type: "LOSE_HEART" });
                         shakeRef.current = {
                             active: true,
@@ -199,12 +221,14 @@ export default function Mario() {
                             duration: 300,
                             intensity: 12,
                         };
+                        // Keep wrong answer and explanation visible for 3 seconds, then move to next question
+                        setTimeout(() => {
+                            dispatch({ type: "WRONG_ANSWER" });
+                            lastHitRef.current = null;
+                            setSelectedOption(null);
+                            setIsCorrect(null);
+                        }, 3000);
                     }
-
-                    setTimeout(() => {
-                        lastHitRef.current = null;
-                        setSelectedOption(null);
-                    }, 800);
                 }
             }
         });
@@ -249,6 +273,7 @@ export default function Mario() {
         PLATFORMS.forEach((pl) => {
             ctx.fillStyle = pl.color;
             ctx.fillRect(pl.x, pl.y, pl.width, pl.height);
+            
             if (pl.letter) {
                 ctx.fillStyle = "#fff";
                 ctx.font = "bold 28px Arial";
@@ -287,7 +312,7 @@ export default function Mario() {
         // ctx.drawImage(/assets/png & gif / gif / boy.gif,)
 
         ctx.restore();
-    }, []);
+    }, [selectedOption, isCorrect]);
 
     /* -------------------- LOOP -------------------- */
     useEffect(() => {
@@ -304,11 +329,18 @@ export default function Mario() {
 
     /* -------------------- INPUT -------------------- */
     useEffect(() => {
-        const down = (e) => (keysRef.current[e.key] = true);
+        document.body.style.overflow = "hidden";
+        const down = (e) => {
+            if (e.key === " ") {
+                e.preventDefault();
+            }
+            keysRef.current[e.key] = true;
+        };
         const up = (e) => (keysRef.current[e.key] = false);
         window.addEventListener("keydown", down);
         window.addEventListener("keyup", up);
         return () => {
+            document.body.style.overflow = "auto";
             window.removeEventListener("keydown", down);
             window.removeEventListener("keyup", up);
         };
@@ -332,7 +364,7 @@ export default function Mario() {
 
     /* -------------------- UI -------------------- */
     return (
-        <div className="h-full flex justify-center gap-6 py-6 bg-[#0b1220]">
+        <div className="h-[calc(100vh-5rem)] flex justify-center gap-6 py-6 bg-[#0b1220]">
 
             {/* GAME AREA */}
             <div className="flex flex-col items-start">
@@ -358,13 +390,24 @@ export default function Mario() {
                     {state.gameOver && !state.won && (
                         <div className="absolute inset-0 bg-black/95 flex flex-col items-center justify-center text-white rounded-lg">
                             <h1 className="text-5xl font-bold mb-4">GAME OVER</h1>
-                            <p className="mb-8 text-gray-300">No Hearts Left!</p>
-                            <button
-                                onClick={restartGame}
-                                className="px-6 py-3 bg-red-600 hover:bg-red-700 rounded"
-                            >
-                                🔄 Restart
-                            </button>
+                            <p className="mb-4 text-gray-300">No Hearts Left!</p>
+                            <p className="mb-8 text-2xl font-semibold">
+                                Score: {state.score}/{QUESTIONS.length}
+                            </p>
+                            <div className="flex gap-4">
+                                <button
+                                    onClick={restartGame}
+                                    className="px-6 py-3 bg-red-600 hover:bg-red-700 rounded"
+                                >
+                                    🔄 Replay
+                                </button>
+                                <button
+                                    onClick={() => window.location.href = '/'}
+                                    className="px-6 py-3 bg-blue-600 hover:bg-blue-700 rounded"
+                                >
+                                    ➡️ Next
+                                </button>
+                            </div>
                         </div>
                     )}
 
@@ -374,18 +417,29 @@ export default function Mario() {
                             <h1 className="text-5xl font-bold mb-4">
                                 🎉 CONGRATULATIONS!
                             </h1>
-                            <p className="mb-8">
-                                You answered all questions correctly!
+                            <p className="mb-4">
+                                You completed the game!
                             </p>
-                            <div>
+                            <p className="mb-6 text-2xl font-semibold">
+                                Score: {state.score}/{QUESTIONS.length}
+                            </p>
+                            <div className="mb-6">
                                 <img src="/assets/png&gif/gif/celebrating.gif" alt="" />
                             </div>
-                            <button
-                                onClick={restartGame}
-                                className="px-6 py-3 bg-white text-green-700 font-semibold rounded"
-                            >
-                                🔄 Play Again
-                            </button>
+                            <div className="flex gap-4">
+                                <button
+                                    onClick={restartGame}
+                                    className="px-6 py-3 bg-white text-green-700 font-semibold rounded hover:bg-gray-100"
+                                >
+                                    🔄 Replay
+                                </button>
+                                <button
+                                    onClick={() => window.location.href = '/'}
+                                    className="px-6 py-3 bg-blue-600 text-white font-semibold rounded hover:bg-blue-700"
+                                >
+                                    ➡️ Next
+                                </button>
+                            </div>
                         </div>
                     )}
                 </div>
@@ -406,15 +460,24 @@ export default function Mario() {
                         <div
                             key={k}
                             className={`p-3 mb-2 rounded-md border
-                ${selected && correct && "bg-green-600/20 border-green-500"}
-                ${selected && !correct && "bg-red-600/20 border-red-500"}
-                ${!selected && "border-blue-500/30"}
+                ${correct && selected && "bg-green-600/20 border-green-500"}
+                ${!correct && selected && "bg-red-600/20 border-red-500"}
+                ${correct && selected === false && isCorrect === false && "bg-green-600/20 border-green-500"}
+                ${!selected && !(correct && isCorrect === false) && "border-blue-500/30"}
               `}
                         >
                             <strong>{k}.</strong> {v}
                         </div>
                     );
                 })}
+
+                {/* Show explanation when wrong answer is selected */}
+                {selectedOption && isCorrect === false && (
+                    <div className="mt-4 p-3 bg-yellow-600/20 border border-yellow-500 rounded-md">
+                        <p className="text-sm font-semibold text-yellow-300 mb-1">Explanation:</p>
+                        <p className="text-sm text-gray-300">{question.explanation}</p>
+                    </div>
+                )}
             </div>
         </div>
     );

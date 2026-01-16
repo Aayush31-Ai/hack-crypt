@@ -121,7 +121,7 @@ const Login = () => {
           {person === "teacher" && (
             <>
               <div className="mb-5">
-                <label className="text-sm font-bold text-[#B19EEF] uppercase tracking-wider">📚 Subject</label>
+                <label className="text-sm font-bold text-[#B19EEF] uppercase tracking-wider">Subject</label>
                 <select
                   className="w-full mt-2 p-3 rounded-lg bg-black/80 border-2 border-[#B19EEF]/50 focus:border-[#B19EEF] focus:outline-none text-white transition-all duration-300 font-medium"
                   value={subject}
@@ -170,7 +170,7 @@ const Login = () => {
             className="w-full mt-8 py-4 px-10 rounded-xl font-bold text-lg uppercase tracking-wider text-white bg-[#B19EEF] hover:bg-[#9B7FDE] transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-[0_0_40px_rgba(177,158,239,0.4)] border-b-4 border-[#8B6FCE] hover:border-[#7B5FBE] relative group overflow-hidden"
           >
             <span className="relative z-10 flex items-center justify-center gap-2">
-              ⚡ ENTER BATTLE ⚡
+              ⚡ Start Battle ⚡
             </span>
             <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
           </button>

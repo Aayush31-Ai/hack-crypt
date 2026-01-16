@@ -101,7 +101,11 @@ const WorldDetail = () => {
         <div className="w-[320px] space-y-6">
           {/* Course Progress Section */}
           <div className="bg-white/5 border border-white/10 rounded-xl p-6 space-y-4">
-            <h3 className="font-semibold text-lg">Course Progress</h3>
+          <div className="flex gap-3 items-center">
+            <img  className="h-20" src="/assets/png&gif/gif/boy.gif" alt="boy" />
+<h3 className="font-semibold text-lg">Course Progress</h3>
+          </div>
+            
             
             <div className="space-y-4">
               {/* Completion Stats */}
