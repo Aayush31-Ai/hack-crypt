@@ -71,7 +71,7 @@ export default function Navbar() {
 
                     <li className="relative group list-none">
                         <span className="cursor-pointer hover:text-[#B19EEF]">
-                            <Link to="/store">Store</Link>
+                            <Link to="/shop">Shop</Link>
                         </span>
 
                         {/* <div className="absolute left-0 top-full pt-2 hidden group-hover:block">
