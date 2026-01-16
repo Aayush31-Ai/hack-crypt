@@ -6,10 +6,9 @@ import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } 
 import Profile from './components/Profile/Profile.jsx'
 import Store from './components/Store/Store.jsx'
 import Mario from './games/mario.jsx'
-import Login from './components/Login'
+import Login from './components/Login.jsx'
 import Testing from './components/Test/Testing.jsx'
 import Testing2 from './components/Test/Testing2.jsx'
-import Login from './components/Login.jsx'
 // import Home from './components/Home.jsx'
 import LandingPage from './components/home/LandingPage'
 import WorldDetail from './pages/WorldDetail'
@@ -34,7 +33,7 @@ const router = createBrowserRouter(
           <Route path="/challenge" element={<ChallengePage />} />
         <Route path="/login/:person" element={<Login />} />
         <Route path="/" element={<LandingPage />} />
-        <Route path="world" element={<World />} />
+        <Route path="world" element={<Worlds />} />
         <Route path="/world/:worldId" element={<WorldDetail />} />
         <Route path="/world/:worldId/zone/:zoneId/stage/:stageId" element={<QuizPage />} />
         <Route path='/leaderboard' element={<Leaderboard />} />
