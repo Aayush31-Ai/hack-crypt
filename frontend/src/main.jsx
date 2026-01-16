@@ -5,13 +5,17 @@ import App from './App.jsx'
 import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from 'react-router-dom'
 import Testing from './components/Test/Testing.jsx'
 import Testing2 from './components/Test/Testing2.jsx'
+import Profile from './components/Profile/Profile.jsx'
+import Store from './components/Store/Store.jsx'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
       <Route path='/' element={<App />}>
-        <Route path='/' element={<Testing />} />
-        <Route path='/testing' element={<Testing2 />} />
+        <Route path='/testing' element={<Testing />} />
+        <Route path='/testing2' element={<Testing2 />} />
+        <Route path='/profile' element={<Profile />} />
+        <Route path='/store' element={<Store />} />
       </Route>
     </>
   )
