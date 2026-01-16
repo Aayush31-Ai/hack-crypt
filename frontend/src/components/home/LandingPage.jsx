@@ -1,9 +1,21 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Gamepad2, Users, Trophy, Zap } from 'lucide-react'
 import PixelBlast from '../PixelBlast/PixleBlast'
+import { useAuth } from '../../context/useAuth'
 
 const LandingPage = () => {
+  const navigate = useNavigate();
+  const { user } = useAuth();
+
+  const handleGetStarted = () => {
+    if (user) {
+      navigate("/world");
+    } else {
+      navigate("/login/student");
+    }
+  };
+
   return (
     <div className="min-h-screen w-full bg-[#0b1220] overflow-hidden relative">
 
@@ -59,14 +71,12 @@ const LandingPage = () => {
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-6 mb-16">
-            <Link to="/login/student">
-              <button className="group relative px-10 py-4 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white font-bold text-lg uppercase tracking-wider transform hover:scale-105 transition-all shadow-[0_0_40px_rgba(139,92,246,0.4)] border-b-4 border-violet-900 hover:border-violet-800 active:scale-95">
-                <span className="flex items-center justify-center gap-3">
-                  <Gamepad2 size={24} className="group-hover:rotate-12 transition-transform" />
-                  START GAME
-                </span>
-              </button>
-            </Link>
+            <button onClick={handleGetStarted} className="group relative px-10 py-4 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white font-bold text-lg uppercase tracking-wider transform hover:scale-105 transition-all shadow-[0_0_40px_rgba(139,92,246,0.4)] border-b-4 border-violet-900 hover:border-violet-800 active:scale-95">
+              <span className="flex items-center justify-center gap-3">
+                <Gamepad2 size={24} className="group-hover:rotate-12 transition-transform" />
+                START GAME
+              </span>
+            </button>
 
             <Link to="/login/teacher">
               <button className="px-10 py-4 rounded-xl bg-slate-900/80 backdrop-blur-md hover:bg-slate-800 border-2 border-slate-700 hover:border-cyan-500/50 text-slate-300 hover:text-cyan-400 font-bold text-lg uppercase tracking-widest flex items-center justify-center gap-3 transform hover:scale-105 transition-all">
@@ -98,14 +108,7 @@ const LandingPage = () => {
             </div>
 
           </div>
-
-          {/* Scroll Indicator */}
-          <div className="flex justify-center items-center gap-2 text-gray-400 mt-16 animate-bounce">
-            <span className="text-sm font-mono">SCROLL DOWN</span>
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-            </svg>
-          </div>
+    
 
         </div>
       </div>
