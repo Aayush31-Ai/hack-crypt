@@ -1,10 +1,10 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { worldData } from "../data/worldData";
+import { worldsData } from "../data/worldData";
 import { useEffect } from "react";
 
 const WorldDetail = () => {
   const { worldId } = useParams();
-  const world = worldData[worldId];
+  const world = worldsData.find(w => w.id === worldId);
   const navigate = useNavigate();
 
 
@@ -102,7 +102,7 @@ const WorldDetail = () => {
           {/* Course Progress Section */}
           <div className="bg-white/5 border border-white/10 rounded-xl p-6 space-y-4">
           <div className="flex gap-3 items-center">
-            <img  className="h-20" src="/assets/png&gif/gif/boy.gif" alt="boy" />
+            <img  className="h-20 " src="/assets/png&gif/gif/boy.gif" alt="boy" />
 <h3 className="font-semibold text-lg">Course Progress</h3>
           </div>
             
