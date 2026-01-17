@@ -57,8 +57,8 @@ const ChallengeQuiz = ({ challenge, onComplete, onClose }) => {
     const passed = percentage >= 70;
 
     return (
-      <div className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center z-50 p-6">
-        <div className="bg-[#0b1220] border border-white/20 rounded-2xl p-8 max-w-md w-full relative">
+      <div className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center z-50 p-4 sm:p-6">
+        <div className="bg-[#0b1220] border border-white/20 rounded-2xl p-6 sm:p-8 max-w-md w-full relative max-h-[90vh] overflow-y-auto">
           <button
             onClick={onClose}
             className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors"
@@ -69,53 +69,53 @@ const ChallengeQuiz = ({ challenge, onComplete, onClose }) => {
           <div className="text-center">
             {passed ? (
               <>
-                <div className={`w-24 h-24 rounded-full bg-gradient-to-br ${challenge.color} flex items-center justify-center text-5xl mx-auto mb-6 shadow-[0_0_40px_rgba(168,85,247,0.5)]`}>
+                <div className={`w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gradient-to-br ${challenge.color} flex items-center justify-center text-4xl sm:text-5xl mx-auto mb-4 sm:mb-6 shadow-[0_0_40px_rgba(168,85,247,0.5)]`}>
                   🎉
                 </div>
-                <h2 className="text-3xl font-bold text-white mb-3">
+                <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2 sm:mb-3">
                   Challenge Completed!
                 </h2>
-                <p className="text-gray-400 mb-6">
+                <p className="text-sm sm:text-base text-gray-400 mb-4 sm:mb-6">
                   Congratulations! You've successfully completed the challenge.
                 </p>
               </>
             ) : (
               <>
-                <div className="w-24 h-24 rounded-full bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center text-5xl mx-auto mb-6">
+                <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center text-4xl sm:text-5xl mx-auto mb-4 sm:mb-6">
                   😔
                 </div>
-                <h2 className="text-3xl font-bold text-white mb-3">
+                <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2 sm:mb-3">
                   Keep Trying!
                 </h2>
-                <p className="text-gray-400 mb-6">
+                <p className="text-sm sm:text-base text-gray-400 mb-4 sm:mb-6">
                   You need 70% to pass. Try again!
                 </p>
               </>
             )}
 
             {/* Stats */}
-            <div className="grid grid-cols-2 gap-4 mb-6">
-              <div className="bg-white/5 border border-white/10 rounded-xl p-4">
-                <p className="text-sm text-gray-400 mb-1">Score</p>
-                <p className="text-2xl font-bold text-white">{score}/{questions.length}</p>
+            <div className="grid grid-cols-2 gap-3 sm:gap-4 mb-4 sm:mb-6">
+              <div className="bg-white/5 border border-white/10 rounded-xl p-3 sm:p-4">
+                <p className="text-xs sm:text-sm text-gray-400 mb-1">Score</p>
+                <p className="text-xl sm:text-2xl font-bold text-white">{score}/{questions.length}</p>
               </div>
-              <div className="bg-white/5 border border-white/10 rounded-xl p-4">
-                <p className="text-sm text-gray-400 mb-1">Percentage</p>
-                <p className="text-2xl font-bold text-white">{percentage.toFixed(0)}%</p>
+              <div className="bg-white/5 border border-white/10 rounded-xl p-3 sm:p-4">
+                <p className="text-xs sm:text-sm text-gray-400 mb-1">Percentage</p>
+                <p className="text-xl sm:text-2xl font-bold text-white">{percentage.toFixed(0)}%</p>
               </div>
             </div>
 
             {passed && (
-              <div className="bg-violet-900/30 border border-violet-500/50 rounded-xl p-4 mb-6">
-                <div className="flex items-center justify-center gap-2 text-violet-300">
-                  <Trophy size={20} />
+              <div className="bg-violet-900/30 border border-violet-500/50 rounded-xl p-3 sm:p-4 mb-4 sm:mb-6">
+                <div className="flex items-center justify-center gap-2 text-violet-300 text-sm sm:text-base">
+                  <Trophy size={18} className="sm:w-5 sm:h-5" />
                   <span className="font-bold">+{challenge.xpReward} XP Earned!</span>
                 </div>
               </div>
             )}
 
             {/* Action Buttons */}
-            <div className="flex gap-3">
+            <div className="flex gap-2 sm:gap-3">
               {!passed && (
                 <button
                   onClick={() => {
@@ -125,14 +125,14 @@ const ChallengeQuiz = ({ challenge, onComplete, onClose }) => {
                     setShowExplanation(false);
                     setQuizCompleted(false);
                   }}
-                  className="flex-1 py-3 rounded-xl bg-orange-600 hover:bg-orange-500 text-white font-bold transition-all"
+                  className="flex-1 py-2 sm:py-3 rounded-xl bg-orange-600 hover:bg-orange-500 text-white font-bold transition-all text-sm sm:text-base"
                 >
                   Try Again
                 </button>
               )}
               <button
                 onClick={passed ? handleComplete : onClose}
-                className={`flex-1 py-3 rounded-xl font-bold transition-all ${
+                className={`flex-1 py-2 sm:py-3 rounded-xl font-bold transition-all text-sm sm:text-base ${
                   passed
                     ? 'bg-gradient-to-r from-violet-600 to-pink-600 hover:from-violet-500 hover:to-pink-500 text-white'
                     : 'bg-white/10 hover:bg-white/20 text-white'
@@ -150,31 +150,31 @@ const ChallengeQuiz = ({ challenge, onComplete, onClose }) => {
   const question = questions[currentQuestion];
 
   return (
-    <div className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center z-50 p-6">
-      <div className="bg-[#0b1220] border border-white/20 rounded-2xl p-8 max-w-2xl w-full relative">
+    <div className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center z-50 p-4 sm:p-6">
+      <div className="bg-[#0b1220] border border-white/20 rounded-2xl p-6 sm:p-8 max-w-2xl w-full relative max-h-[90vh] overflow-y-auto">
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors"
+          className="absolute top-3 right-3 sm:top-4 sm:right-4 text-gray-400 hover:text-white transition-colors"
         >
           <X size={24} />
         </button>
 
         {/* Header */}
-        <div className="mb-6">
-          <div className="flex items-center justify-between mb-4">
+        <div className="mb-4 sm:mb-6">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 mb-4">
             <div className="flex items-center gap-3">
-              <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${challenge.color} flex items-center justify-center text-2xl`}>
+              <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br ${challenge.color} flex items-center justify-center text-xl sm:text-2xl flex-shrink-0`}>
                 {challenge.icon}
               </div>
-              <div>
-                <h2 className="text-xl font-bold text-white">{challenge.title}</h2>
-                <p className="text-sm text-gray-400">Question {currentQuestion + 1} of {questions.length}</p>
+              <div className="min-w-0">
+                <h2 className="text-lg sm:text-xl font-bold text-white truncate">{challenge.title}</h2>
+                <p className="text-xs sm:text-sm text-gray-400">Question {currentQuestion + 1} of {questions.length}</p>
               </div>
             </div>
             <div className="text-right">
-              <p className="text-sm text-gray-400">Score</p>
-              <p className="text-xl font-bold text-violet-400">{score}/{questions.length}</p>
+              <p className="text-xs sm:text-sm text-gray-400">Score</p>
+              <p className="text-lg sm:text-xl font-bold text-violet-400">{score}/{questions.length}</p>
             </div>
           </div>
 
@@ -188,11 +188,11 @@ const ChallengeQuiz = ({ challenge, onComplete, onClose }) => {
         </div>
 
         {/* Question */}
-        <div className="mb-6">
-          <h3 className="text-xl font-semibold text-white mb-6">{question.question}</h3>
+        <div className="mb-4 sm:mb-6">
+          <h3 className="text-lg sm:text-xl font-semibold text-white mb-4 sm:mb-6">{question.question}</h3>
 
           {/* Options */}
-          <div className="space-y-3">
+          <div className="space-y-2 sm:space-y-3">
             {question.options.map((option, idx) => {
               const isSelected = selectedAnswer === option;
               const isCorrect = option === question.correct;
@@ -203,7 +203,7 @@ const ChallengeQuiz = ({ challenge, onComplete, onClose }) => {
                   key={idx}
                   onClick={() => !selectedAnswer && handleAnswerSelect(option)}
                   disabled={selectedAnswer !== null}
-                  className={`w-full p-4 rounded-xl border-2 text-left transition-all ${
+                  className={`w-full p-3 sm:p-4 rounded-xl border-2 text-left transition-all text-sm sm:text-base ${
                     !showResult
                       ? 'border-white/20 hover:border-violet-500/50 hover:bg-white/5'
                       : isSelected && isCorrect
@@ -216,15 +216,15 @@ const ChallengeQuiz = ({ challenge, onComplete, onClose }) => {
                   }`}
                 >
                   <div className="flex items-center justify-between">
-                    <span className="text-white font-medium">{option}</span>
+                    <span className="text-white font-medium break-words">{option}</span>
                     {showResult && isSelected && isCorrect && (
-                      <CheckCircle size={20} className="text-green-400" />
+                      <CheckCircle size={18} className="text-green-400 flex-shrink-0 ml-2" />
                     )}
                     {showResult && isSelected && !isCorrect && (
-                      <XCircle size={20} className="text-red-400" />
+                      <XCircle size={18} className="text-red-400 flex-shrink-0 ml-2" />
                     )}
                     {showResult && !isSelected && isCorrect && (
-                      <CheckCircle size={20} className="text-green-400" />
+                      <CheckCircle size={18} className="text-green-400 flex-shrink-0 ml-2" />
                     )}
                   </div>
                 </button>
@@ -235,9 +235,9 @@ const ChallengeQuiz = ({ challenge, onComplete, onClose }) => {
 
         {/* Explanation */}
         {showExplanation && (
-          <div className="mb-6 p-4 bg-yellow-900/20 border border-yellow-500/50 rounded-xl">
-            <p className="text-sm font-semibold text-yellow-300 mb-2">💡 Explanation:</p>
-            <p className="text-sm text-gray-300">{question.explanation}</p>
+          <div className="mb-4 sm:mb-6 p-3 sm:p-4 bg-yellow-900/20 border border-yellow-500/50 rounded-xl">
+            <p className="text-xs sm:text-sm font-semibold text-yellow-300 mb-2">💡 Explanation:</p>
+            <p className="text-xs sm:text-sm text-gray-300">{question.explanation}</p>
           </div>
         )}
 
@@ -245,7 +245,7 @@ const ChallengeQuiz = ({ challenge, onComplete, onClose }) => {
         {showExplanation && (
           <button
             onClick={handleNext}
-            className="w-full py-3 rounded-xl bg-gradient-to-r from-violet-600 to-pink-600 hover:from-violet-500 hover:to-pink-500 text-white font-bold transition-all"
+            className="w-full py-2 sm:py-3 rounded-xl bg-gradient-to-r from-violet-600 to-pink-600 hover:from-violet-500 hover:to-pink-500 text-white font-bold transition-all text-sm sm:text-base"
           >
             Next Question →
           </button>

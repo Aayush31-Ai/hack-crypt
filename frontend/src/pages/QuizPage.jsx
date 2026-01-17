@@ -43,22 +43,22 @@ const QuizPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[radial-gradient(60%_60%_at_20%_10%,_rgba(177,158,239,0.12),_transparent_60%),radial-gradient(50%_50%_at_80%_20%,_rgba(177,158,239,0.08),_transparent_55%),linear-gradient(135deg,_#05060b_0%,_#0b0f1a_45%,_#05060b_100%)] text-white flex items-center justify-center">
-      <div className="w-full max-w-xl bg-white/5 border border-white/10 rounded-xl p-8">
+    <div className="min-h-screen bg-[radial-gradient(60%_60%_at_20%_10%,_rgba(177,158,239,0.12),_transparent_60%),radial-gradient(50%_50%_at_80%_20%,_rgba(177,158,239,0.08),_transparent_55%),linear-gradient(135deg,_#05060b_0%,_#0b0f1a_45%,_#05060b_100%)] text-white flex items-center justify-center p-4 sm:p-6 lg:p-8">
+      <div className="w-full max-w-xl bg-white/5 border border-white/10 rounded-xl p-6 sm:p-8 max-h-[90vh] overflow-y-auto">
 
-        <h1 className="text-2xl font-bold mb-2">
+        <h1 className="text-xl sm:text-2xl font-bold mb-2">
           {stage.name} – Quiz
         </h1>
 
-        <p className="text-sm text-gray-400 mb-6">
+        <p className="text-xs sm:text-sm text-gray-400 mb-6">
           Question {current + 1} of {stage.questions.length}
         </p>
 
         {current < stage.questions.length ? (
           <>
-            <h2 className="text-lg mb-6">{question.q}</h2>
+            <h2 className="text-base sm:text-lg mb-4 sm:mb-6">{question.q}</h2>
 
-            <div className="space-y-3">
+            <div className="space-y-2 sm:space-y-3">
               {question.options.map((opt, i) => {
                 const isCorrect = opt === question.answer;
                 const isSelected = opt === selected;
@@ -68,7 +68,7 @@ const QuizPage = () => {
                     key={i}
                     disabled={showExplanation}
                     onClick={() => handleAnswer(opt)}
-                    className={`w-full text-left px-4 py-3 rounded-lg border transition
+                    className={`w-full text-left px-3 sm:px-4 py-2 sm:py-3 rounded-lg border transition text-sm sm:text-base
                       ${
                         selected
                           ? isCorrect
@@ -87,16 +87,16 @@ const QuizPage = () => {
 
             {/* EXPLANATION */}
             {showExplanation && (
-              <div className="mt-6 bg-white/10 border border-white/20 rounded-lg p-4">
-                <p className="text-sm text-red-400 mb-1">❌ Incorrect</p>
-                <p className="text-sm text-gray-300">
+              <div className="mt-4 sm:mt-6 bg-white/10 border border-white/20 rounded-lg p-3 sm:p-4">
+                <p className="text-xs sm:text-sm text-red-400 mb-1">❌ Incorrect</p>
+                <p className="text-xs sm:text-sm text-gray-300">
                   <span className="font-semibold text-white">Explanation: </span>
                   {question.explanation}
                 </p>
 
                 <button
                   onClick={nextQuestion}
-                  className="mt-4 px-4 py-2 bg-[#B19EEF] text-black rounded-md font-semibold"
+                  className="mt-3 sm:mt-4 px-4 py-2 bg-[#B19EEF] text-black rounded-md font-semibold text-sm sm:text-base hover:bg-[#9d85e0] transition-colors"
                 >
                   Next Question
                 </button>
@@ -105,11 +105,11 @@ const QuizPage = () => {
           </>
         ) : (
           <div className="text-center">
-            <h2 className="text-2xl font-bold mb-4">Quiz Completed 🎉</h2>
-            <p className="text-lg mb-6">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4">Quiz Completed 🎉</h2>
+            <p className="text-base sm:text-lg mb-4 sm:mb-6">
               Score: {score} / {stage.questions.length}
             </p>
-            <p className="text-sm text-gray-400 mb-4">
+            <p className="text-xs sm:text-sm text-gray-400 mb-4 sm:mb-6">
               XP Earned: +{Math.round((score / stage.questions.length) * 50)}
             </p>
             <button
@@ -119,7 +119,7 @@ const QuizPage = () => {
                 saveQuizScore(worldId, zoneId, stageId, score, stage.questions.length);
                 navigate(`/world/${worldId}`);
               }}
-              className="mt-4 px-6 py-3 bg-[#B19EEF] text-black font-semibold rounded-lg hover:bg-[#9d85e0] transition-colors cursor-pointer"
+              className="mt-4 px-4 sm:px-6 py-2 sm:py-3 bg-[#B19EEF] text-black font-semibold rounded-lg hover:bg-[#9d85e0] transition-colors cursor-pointer text-sm sm:text-base"
             >
               Back to World
             </button>

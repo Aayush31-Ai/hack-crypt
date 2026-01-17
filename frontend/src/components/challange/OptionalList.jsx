@@ -1,6 +1,6 @@
 const OptionsList = ({ options, answer, selected, onSelect, locked }) => {
   return (
-    <div className="space-y-3">
+    <div className="space-y-2 sm:space-y-3">
       {options.map((opt, i) => {
         const isCorrect = opt === answer;
         const isSelected = opt === selected;
@@ -10,7 +10,7 @@ const OptionsList = ({ options, answer, selected, onSelect, locked }) => {
             key={i}
             disabled={locked}
             onClick={() => onSelect(opt)}
-            className={`w-full text-left px-4 py-3 rounded-lg border transition
+            className={`w-full text-left px-3 sm:px-4 py-2 sm:py-3 rounded-lg border transition text-sm sm:text-base
               ${
                 selected
                   ? isCorrect

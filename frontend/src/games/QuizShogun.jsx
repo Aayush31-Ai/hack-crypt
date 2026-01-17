@@ -190,62 +190,62 @@ const QuizShogun = () => {
     }, [playerHP, botHP]);
 
     return (
-        <div style={{ minHeight: "100vh", background: "#000", color: "#fff", display: "flex", flexDirection: "column", alignItems: "center", padding: "20px", fontFamily: "monospace", fontSize: "22px" }}>
-            <h1 style={{ color: "#ffd700", letterSpacing: "8px", marginBottom: "30px" }}>QUIZ SHOGUN</h1>
+        <div style={{ minHeight: "100vh", background: "#000", color: "#fff", display: "flex", flexDirection: "column", alignItems: "center", padding: "max(16px, 5vw)", fontFamily: "monospace", fontSize: "clamp(14px, 3vw, 22px)", gap: "16px" }}>
+            <h1 style={{ color: "#ffd700", letterSpacing: "8px", marginBottom: "16px", fontSize: "clamp(20px, 6vw, 40px)", textAlign: "center" }}>QUIZ SHOGUN</h1>
 
             {/* HUD */}
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "40px", marginBottom: "20px", width: "100%", maxWidth: "700px" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: "12px", width: "250px" }}>
-                    <div style={{ width: "60px", height: "60px", borderRadius: "50%", border: `2px solid ${playerHP > 0 ? "#4facfe" : "#555"}`, display: "flex", alignItems: "center", justifyContent: "center", background: "#111", fontSize: "24px" }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "clamp(20px, 5vw, 40px)", marginBottom: "16px", width: "100%", maxWidth: "800px", flexWrap: "wrap" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "12px", width: "100%", maxWidth: "300px" }}>
+                    <div style={{ width: "clamp(50px, 12vw, 80px)", height: "clamp(50px, 12vw, 80px)", borderRadius: "50%", border: `2px solid ${playerHP > 0 ? "#4facfe" : "#555"}`, display: "flex", alignItems: "center", justifyContent: "center", background: "#111", fontSize: "clamp(18px, 5vw, 32px)" }}>
                         {playerHP > 0 ? "👤" : "💀"}
                     </div>
                     <div style={{ flex: 1 }}>
-                        <div style={{ fontSize: "10px", color: "#4facfe" }}>SAMURAI_1</div>
-                        <div style={{ height: "10px", background: "#222", border: "1px solid #4facfe" }}>
+                        <div style={{ fontSize: "clamp(10px, 2vw, 14px)", color: "#4facfe" }}>SAMURAI_1</div>
+                        <div style={{ height: "8px", background: "#222", border: "1px solid #4facfe" }}>
                             <div style={{ width: `${playerHP}%`, height: "100%", background: "#4facfe", transition: "0.3s" }} />
                         </div>
                     </div>
                 </div>
 
-                <div style={{ fontSize: "22px", color: "#ffcc00", fontWeight: "bold" }}>VS</div>
+                <div style={{ fontSize: "clamp(16px, 4vw, 24px)", color: "#ffcc00", fontWeight: "bold" }}>VS</div>
 
-                <div style={{ display: "flex", alignItems: "center", gap: "12px", width: "250px", flexDirection: "row-reverse" }}>
-                    <div style={{ width: "60px", height: "60px", borderRadius: "50%", border: `2px solid ${botHP > 0 ? "#f093fb" : "#555"}`, display: "flex", alignItems: "center", justifyContent: "center", background: "#111", fontSize: "24px" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "12px", width: "100%", maxWidth: "300px", flexDirection: "row-reverse" }}>
+                    <div style={{ width: "clamp(50px, 12vw, 80px)", height: "clamp(50px, 12vw, 80px)", borderRadius: "50%", border: `2px solid ${botHP > 0 ? "#f093fb" : "#555"}`, display: "flex", alignItems: "center", justifyContent: "center", background: "#111", fontSize: "clamp(18px, 5vw, 32px)" }}>
                         {botHP > 0 ? "🤖" : "💀"}
                     </div>
                     <div style={{ flex: 1, textAlign: "right" }}>
-                        <div style={{ fontSize: "10px", color: "#f093fb" }}>REBEL_BOT</div>
-                        <div style={{ height: "10px", background: "#222", border: "1px solid #f093fb" }}>
+                        <div style={{ fontSize: "clamp(10px, 2vw, 14px)", color: "#f093fb" }}>REBEL_BOT</div>
+                        <div style={{ height: "8px", background: "#222", border: "1px solid #f093fb" }}>
                             <div style={{ width: `${botHP}%`, height: "100%", background: "#f093fb", transition: "0.3s" }} />
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div style={{ height: "20px", marginBottom: "10px", color: "#ffcc00", fontWeight: "bold" }}>{statusMsg}</div>
+            <div style={{ height: "20px", marginBottom: "10px", color: "#ffcc00", fontWeight: "bold", textAlign: "center", fontSize: "clamp(14px, 3vw, 18px)" }}>{statusMsg}</div>
 
-            <canvas ref={canvasRef} width={600} height={300} style={{ borderBottom: "2px solid #333", borderRadius: "10px", marginBottom: "20px" }} />
+            <canvas ref={canvasRef} width={600} height={300} style={{ borderBottom: "2px solid #333", borderRadius: "10px", marginBottom: "16px", width: "100%", maxWidth: "800px", height: "auto", aspectRatio: "2" }} />
 
             {!gameOver && shuffledQuestions.length > 0 ? (
-                <div style={{ maxWidth: "600px", width: "100%", background: "#0a0a0a", padding: "20px", border: "1px solid #222", height: "200px" }}>
-                    <h2 style={{ color: "#aaa", marginBottom: "20px", fontSize: "15px" }}>
+                <div style={{ maxWidth: "800px", width: "100%", background: "#0a0a0a", padding: "clamp(16px, 4vw, 24px)", border: "1px solid #222", minHeight: "200px", display: "flex", flexDirection: "column", gap: "16px" }}>
+                    <h2 style={{ color: "#aaa", marginBottom: "0", fontSize: "clamp(13px, 2.5vw, 16px)", lineHeight: "1.4" }}>
                         {shuffledQuestions[currentQ].q}
                     </h2>
-                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
+                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "clamp(8px, 2vw, 12px)", flex: 1 }}>
                         {shuffledQuestions[currentQ].options.map((opt, i) => (
                             <button key={i} disabled={!!attacking} onClick={() => handleAnswer(i)}
-                                style={{ padding: "14px", background: "#111", border: "1px solid #333", color: "#fff", cursor: "pointer", height: "50px", textAlign: "center" }}>
+                                style={{ padding: "clamp(12px, 3vw, 16px)", background: "#111", border: "1px solid #333", color: "#fff", cursor: "pointer", minHeight: "44px", textAlign: "center", fontSize: "clamp(12px, 2vw, 14px)", borderRadius: "4px" }}>
                                 {opt}
                             </button>
                         ))}
                     </div>
                 </div>
             ) : (
-                <div style={{ marginTop: "30px", textAlign: "center" }}>
-                    <h2 style={{ fontSize: "3rem", color: playerHP > 0 ? "#4facfe" : "#f093fb" }}>
+                <div style={{ marginTop: "24px", textAlign: "center", width: "100%" }}>
+                    <h2 style={{ fontSize: "clamp(24px, 8vw, 48px)", color: playerHP > 0 ? "#4facfe" : "#f093fb", marginBottom: "24px" }}>
                         {playerHP > 0 ? "VICTORY" : "DEFEATED"}
                     </h2>
-                    <button onClick={() => window.location.reload()} style={{ padding: "10px 40px", background: "#fff", border: "none", cursor: "pointer", fontWeight: "bold", color: "black", fontSize: "22px" }}>
+                    <button onClick={() => window.location.reload()} style={{ padding: "clamp(8px, 2vw, 12px) clamp(20px, 8vw, 40px)", background: "#fff", border: "none", cursor: "pointer", fontWeight: "bold", color: "black", fontSize: "clamp(14px, 3vw, 22px)", borderRadius: "4px" }}>
                         RETRY
                     </button>
                 </div>

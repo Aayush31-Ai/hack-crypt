@@ -406,46 +406,46 @@ export default function Mario() {
 
     /* -------------------- UI -------------------- */
     return (
-        <div className="h-[calc(100vh-5rem)] flex justify-center gap-6 py-6 bg-[#0b1220]">
+        <div className="min-h-screen flex justify-center gap-4 sm:gap-6 py-4 sm:py-6 px-4 bg-[#0b1220] overflow-auto">
 
             {/* GAME AREA */}
-            <div className="flex flex-col items-start">
+            <div className="flex flex-col items-center sm:items-start w-full sm:w-auto">
                 {/* Lifeline */}
-                <div className="flex gap-4 mb-3 text-white">
-                    <span className="px-3 py-1 bg-red-600/20 border border-red-500 rounded">
+                <div className="flex gap-2 sm:gap-4 mb-3 text-white text-xs sm:text-sm">
+                    <span className="px-2 sm:px-3 py-1 bg-red-600/20 border border-red-500 rounded">
                         ♥ {state.hearts}
                     </span>
-                    <span className="px-3 py-1 bg-yellow-600/20 border border-yellow-500 rounded">
+                    <span className="px-2 sm:px-3 py-1 bg-yellow-600/20 border border-yellow-500 rounded">
                         ⭐ {state.score}/{QUESTIONS.length}
                     </span>
                 </div>
 
-                <div className="relative">
+                <div className="relative w-full max-w-2xl">
                     <canvas
                         ref={canvasRef}
                         width="800"
                         height="500"
-                        className="border border-blue-500/40 rounded-lg bg-black"
+                        className="border border-blue-500/40 rounded-lg bg-black w-full h-auto"
                     />
 
                     {/* GAME OVER */}
                     {state.gameOver && !state.won && (
-                        <div className="absolute inset-0 bg-black/95 flex flex-col items-center justify-center text-white rounded-lg">
-                            <h1 className="text-5xl font-bold mb-4">GAME OVER</h1>
-                            <p className="mb-4 text-gray-300">No Hearts Left!</p>
-                            <p className="mb-8 text-2xl font-semibold">
+                        <div className="absolute inset-0 bg-black/95 flex flex-col items-center justify-center text-white rounded-lg p-4">
+                            <h1 className="text-3xl sm:text-5xl font-bold mb-4 text-center">GAME OVER</h1>
+                            <p className="mb-4 text-gray-300 text-sm sm:text-base">No Hearts Left!</p>
+                            <p className="mb-6 sm:mb-8 text-xl sm:text-2xl font-semibold">
                                 Score: {state.score}/{QUESTIONS.length}
                             </p>
-                            <div className="flex gap-4">
+                            <div className="flex gap-2 sm:gap-4 flex-col sm:flex-row">
                                 <button
                                     onClick={restartGame}
-                                    className="px-6 py-3 bg-red-600 hover:bg-red-700 rounded"
+                                    className="px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base bg-red-600 hover:bg-red-700 rounded"
                                 >
                                     🔄 Replay
                                 </button>
                                 <button
                                     onClick={() => window.location.href = '/'}
-                                    className="px-6 py-3 bg-blue-600 hover:bg-blue-700 rounded"
+                                    className="px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base bg-blue-600 hover:bg-blue-700 rounded"
                                 >
                                     ➡️ Next
                                 </button>
@@ -455,29 +455,29 @@ export default function Mario() {
 
                     {/* WIN SCREEN */}
                     {state.won && (
-                        <div className="absolute inset-0 bg-green-700/95 flex flex-col items-center justify-center text-white rounded-lg">
-                            <h1 className="text-5xl font-bold mb-4">
+                        <div className="absolute inset-0 bg-green-700/95 flex flex-col items-center justify-center text-white rounded-lg p-4">
+                            <h1 className="text-3xl sm:text-5xl font-bold mb-4 text-center">
                                 🎉 CONGRATULATIONS!
                             </h1>
-                            <p className="mb-4">
+                            <p className="mb-4 text-sm sm:text-base">
                                 You completed the game!
                             </p>
-                            <p className="mb-6 text-2xl font-semibold">
+                            <p className="mb-4 sm:mb-6 text-lg sm:text-2xl font-semibold">
                                 Score: {state.score}/{QUESTIONS.length}
                             </p>
-                            <div className="mb-6">
-                                <img src="/assets/png&gif/gif/celebrating.gif" alt="" />
+                            <div className="mb-4 sm:mb-6 max-h-32 sm:max-h-48">
+                                <img src="/assets/png&gif/gif/celebrating.gif" alt="" className="w-24 sm:w-32 h-auto" />
                             </div>
-                            <div className="flex gap-4">
+                            <div className="flex gap-2 sm:gap-4 flex-col sm:flex-row">
                                 <button
                                     onClick={restartGame}
-                                    className="px-6 py-3 bg-white text-green-700 font-semibold rounded hover:bg-gray-100"
+                                    className="px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base bg-white text-green-700 font-semibold rounded hover:bg-gray-100"
                                 >
                                     🔄 Replay
                                 </button>
                                 <button
                                     onClick={() => window.location.href = '/'}
-                                    className="px-6 py-3 bg-blue-600 text-white font-semibold rounded hover:bg-blue-700"
+                                    className="px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base bg-blue-600 text-white font-semibold rounded hover:bg-blue-700"
                                 >
                                     ➡️ Next
                                 </button>
@@ -488,11 +488,11 @@ export default function Mario() {
             </div>
 
             {/* QUESTION PANEL */}
-            <div className="w-80 bg-[#0b1220] text-white p-5 rounded-xl border border-blue-500/40">
-                <h2 className="text-lg font-semibold mb-2">
+            <div className="w-full sm:w-80 bg-[#0b1220] text-white p-3 sm:p-5 rounded-xl border border-blue-500/40">
+                <h2 className="text-base sm:text-lg font-semibold mb-2">
                     Question {state.questionIndex + 1}
                 </h2>
-                <p className="mb-4 text-gray-300">{question.q}</p>
+                <p className="mb-3 sm:mb-4 text-xs sm:text-sm text-gray-300">{question.q}</p>
 
                 {Object.entries(question.options).map(([k, v]) => {
                     const correct = k === question.correct;
@@ -501,7 +501,7 @@ export default function Mario() {
                     return (
                         <div
                             key={k}
-                            className={`p-3 mb-2 rounded-md border
+                            className={`p-2 sm:p-3 mb-2 rounded-md border text-xs sm:text-sm
                 ${correct && selected && "bg-green-600/20 border-green-500"}
                 ${!correct && selected && "bg-red-600/20 border-red-500"}
                 ${correct && selected === false && isCorrect === false && "bg-green-600/20 border-green-500"}
@@ -515,9 +515,9 @@ export default function Mario() {
 
                 {/* Show explanation when wrong answer is selected */}
                 {selectedOption && isCorrect === false && (
-                    <div className="mt-4 p-3 bg-yellow-600/20 border border-yellow-500 rounded-md">
-                        <p className="text-sm font-semibold text-yellow-300 mb-1">Explanation:</p>
-                        <p className="text-sm text-gray-300">{question.explanation}</p>
+                    <div className="mt-3 sm:mt-4 p-2 sm:p-3 bg-yellow-600/20 border border-yellow-500 rounded-md text-xs sm:text-sm">
+                        <p className="font-semibold text-yellow-300 mb-1">Explanation:</p>
+                        <p className="text-gray-300">{question.explanation}</p>
                     </div>
                 )}
             </div>
