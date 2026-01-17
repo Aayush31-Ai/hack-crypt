@@ -1,15 +1,15 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { worldData } from "../data/worldData";
+import { worldsData } from "../data/worldData";
 import { useState } from "react";
 
 const QuizPage = () => {
   const { worldId, zoneId, stageId } = useParams();
   const navigate = useNavigate();
 
-  const stage =
-    worldData[worldId]?.zones
-      .find((z) => z.id === Number(zoneId))
-      ?.stages.find((s) => s.id === Number(stageId));
+  const world = worldsData.find(w => w.id === worldId);
+  const stage = world?.zones
+    .find((z) => z.id === Number(zoneId))
+    ?.stages.find((s) => s.id === Number(stageId));
 
   const [current, setCurrent] = useState(0);
   const [score, setScore] = useState(0);

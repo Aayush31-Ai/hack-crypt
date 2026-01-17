@@ -1,44 +1,13 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-
-const worlds = [
-  {
-    id: "python",
-    name: "Code Realm",
-    subtitle: "Programming Fundamentals",
-    progress: 45,
-    status: "active",
-  },
-  {
-    id: 2,
-    name: "Logic Realm",
-    subtitle: "Maths & Problem Solving",
-    progress: 20,
-    status: "active",
-  },
-  {
-    id: 3,
-    name: "Force Realm",
-    subtitle: "Physics Concepts",
-    progress: 0,
-    status: "active",
-  },
-  {
-    id: "javascript",
-    name: "JavaScript",
-    subtitle: "Data Structures",
-    progress: 0,
-    status: "active",
-  },
-];
+import { worldsData } from "../data/worldData";
 
 const Worlds = () => {
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
 
-  useEffect(()=>{
-window.scrollTo({top:0,behavior:"smooth"})
-  },[])
-
-    const navigate=useNavigate()
+  const navigate = useNavigate();
   return (
     <div className="min-h-screen bg-black text-white px-10 py-12">
 
@@ -54,7 +23,7 @@ window.scrollTo({top:0,behavior:"smooth"})
 
       {/* Worlds Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
-        {worlds.map((world) => (
+        {worldsData.map((world) => (
           <div
             key={world.id}
             onClick={() => navigate(`/world/${world.id}`)}

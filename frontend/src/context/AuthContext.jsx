@@ -35,7 +35,6 @@ export const AuthProvider = ({ children }) => {
       avatar: userData.avatar || 'default_avatar',
       frame: userData.frame || 'default_frame',
       globalXP: userData.globalXP || 0,
-      coins: userData.coins || 0,
       loginTime: new Date().toISOString(),
     };
 

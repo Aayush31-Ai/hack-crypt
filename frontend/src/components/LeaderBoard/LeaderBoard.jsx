@@ -22,7 +22,7 @@ function LeaderBoard() {
             {/* Table Wrapper */}
             <div className="max-w-5xl mx-auto bg-[#0f172a] rounded-2xl shadow-lg border border-white/10 overflow-hidden">
                 {/* Header */}
-                <div className="grid grid-cols-4 px-6 py-4 text-sm font-semibold text-gray-300 bg-[#020617]">
+                <div className="grid grid-cols-3 px-6 py-4 text-sm font-semibold text-gray-300 bg-[#020617]">
                     <span>Rank</span>
                     <span>Player</span>
                     <span className="text-right">XP</span>
@@ -33,7 +33,7 @@ function LeaderBoard() {
                     {sortedPlayers.map((player, index) => (
                         <div
                             key={player.uid}
-                            className="grid grid-cols-4 px-6 py-4 items-center hover:bg-white/5 transition"
+                            className="grid grid-cols-3 px-6 py-4 items-center hover:bg-white/5 transition"
                         >
                             {/* Rank */}
                             <span className="font-bold text-purple-400">
