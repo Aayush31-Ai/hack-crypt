@@ -213,7 +213,7 @@ export const worldsData = [
     name: "JavaScript Realm",
     subtitle: "Web & Logic Building",
     description: "Learn JavaScript for building interactive web applications.",
-    image: "/assets/png&gif/gif/bridge&Grass.gif.gif",
+    image: "/assets/png&gif/gif/bridge&Grass.gif",
     status: "active",
     progress: 0,
     zones: [

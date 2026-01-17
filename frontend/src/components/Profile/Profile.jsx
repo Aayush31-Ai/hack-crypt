@@ -3,6 +3,7 @@ import { useLocation, useParams } from 'react-router-dom';
 import { Star, Award, Trophy, Zap, User, Edit2 } from 'lucide-react';
 import CurrentUser from '../../playerData/CurrentUser';
 import players from '../../playerData/player';
+import { getPlayerData, getPlayerStats } from '../../services/localStorage';
 
 function Profile() {
   const location = useLocation();
@@ -13,9 +14,16 @@ function Profile() {
   const [isEditing, setIsEditing] = useState(false);
   const [about, setAbout] = useState(displayUser.about || "Passionate coder and problem solver 🚀");
   const [editedAbout, setEditedAbout] = useState(about);
+  const [playerData, setPlayerData] = useState(null);
+  const [playerStats, setPlayerStats] = useState(null);
 
   useEffect(()=>{
-window.scrollTo({top:0,behavior:"smooth"})
+    window.scrollTo({top:0,behavior:"smooth"})
+    // Load from localStorage
+    const data = getPlayerData();
+    const stats = getPlayerStats();
+    setPlayerData(data);
+    setPlayerStats(stats);
   },[])
 
   useEffect(() => {
@@ -24,12 +32,12 @@ window.scrollTo({top:0,behavior:"smooth"})
     setEditedAbout(nextAbout);
   }, [displayUser]);
 
-  // Calculate rank based on XP
+  // Calculate rank based on XP from localStorage
+  const userXp = playerData?.xp || displayUser.xp || 0;
   const sortedPlayers = [...players].sort((a, b) => b.xp - a.xp);
   const rankIndex = sortedPlayers.findIndex((p) => p.uid === displayUser.uid);
   const userRank = rankIndex >= 0 ? rankIndex + 1 : players.length;
-  const userBadges = Array.isArray(displayUser.badges) ? displayUser.badges : [];
-  const userXp = displayUser.xp || 0;
+  const userBadges = playerData?.badges || displayUser.badges || [];
 
   // Badge descriptions
   const badgeDescriptions = {
@@ -119,7 +127,7 @@ window.scrollTo({top:0,behavior:"smooth"})
                           <span className="text-xs font-bold text-violet-300/70 uppercase tracking-widest">Total XP</span>
                           <Star className="text-violet-400 fill-violet-400 group-hover/card:scale-125 transition-transform" size={22} />
                         </div>
-                        <p className="text-4xl font-black text-transparent bg-gradient-to-r from-violet-300 to-purple-300 bg-clip-text mb-2">{userXp.toLocaleString()}</p>
+                        <p className="text-4xl font-black text-transparent bg-gradient-to-r from-violet-300 to-purple-300 bg-clip-text mb-2">{playerData?.xp?.toLocaleString() || userXp.toLocaleString()}</p>
                         <p className="text-xs text-violet-300/50">Points Earned</p>
                       </div>
                     </div>
@@ -132,7 +140,7 @@ window.scrollTo({top:0,behavior:"smooth"})
                           <span className="text-xs font-bold text-violet-300/70 uppercase tracking-widest">Badges</span>
                           <Award className="text-cyan-400 group-hover/card:scale-125 transition-transform" size={22} />
                         </div>
-                        <p className="text-4xl font-black text-transparent bg-gradient-to-r from-cyan-300 to-blue-300 bg-clip-text mb-2">{userBadges.length}</p>
+                        <p className="text-4xl font-black text-transparent bg-gradient-to-r from-cyan-300 to-blue-300 bg-clip-text mb-2">{userBadges?.length || 0}</p>
                         <p className="text-xs text-violet-300/50">Achievements</p>
                       </div>
                     </div>

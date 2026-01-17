@@ -13,11 +13,11 @@ export default function Navbar() {
         <>
             <nav className="bg-[#0b1220] text-white px-6 py-4 flex items-center justify-around overflow-visible relative z-50">
                 {/* Left: Logo */}
-                <div className="">
+                
                     <Link to="/">
                         <img className="w-[200px] h-12 bg-none scale-125" src="/assets/png&gif/png/logo-purple.png" alt="" />
                     </Link>
-                </div>
+                
 
                 {/* Center: Menu */}
                 <div className="flex justify-between w-sm px-2 text-xl">
@@ -42,7 +42,7 @@ export default function Navbar() {
                             <div className="p-[2px] rounded-md bg-gradient-to-r z-50 from-[#B19EEF] via-[#B19EEF] to-[#B19EEF]">
                                 <ul className="w-56 bg-[#111a2e] rounded-md shadow-lg z-50">
                                     <li className="px-4 py-3 hover:bg-[#1a2540] cursor-pointer hover:text-[#B19EEF]"><Link to="/leaderboard">LeaderBoard</Link></li>
-                                    <li className="px-4 py-3 hover:bg-[#1a2540] hover:text-[#B19EEF]"><Link to="">Challenges</Link></li>
+                                    <li className="px-4 py-3 hover:bg-[#1a2540] hover:text-[#B19EEF]"><Link to="/challenge">Challenges</Link></li>
                                 </ul>
                             </div>
                         </div>

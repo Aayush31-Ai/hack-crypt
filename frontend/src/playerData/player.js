@@ -277,6 +277,62 @@ const players = [
         ],
         "coins": 2000
     }
+    ,
+    {
+        "name": "AIArchMage",
+        "uid": "1026",
+        "xp": 3120,
+        "avatar": "/assets/avataar/intelectual-boy.jpg",
+        "badges": [
+            "/assets/badges/logic-pro.png",
+            "/assets/badges/level-accended.png"
+        ],
+        "coins": 1800
+    },
+    {
+        "name": "BugBreaker",
+        "uid": "1027",
+        "xp": 1875,
+        "avatar": "/assets/avataar/level-up-girl.jpg",
+        "badges": [
+            "/assets/badges/concept-cracked.png",
+            "/assets/badges/accuracy-ace.png"
+        ],
+        "coins": 900
+    },
+    {
+        "name": "PixelPaladin",
+        "uid": "1028",
+        "xp": 2680,
+        "avatar": "/assets/avataar/cosmic-girl.jpg",
+        "badges": [
+            "/assets/badges/streak-holder.png",
+            "/assets/badges/speed-thinker.png"
+        ],
+        "coins": 1500
+    },
+    {
+        "name": "ScriptSamurai",
+        "uid": "1029",
+        "xp": 2230,
+        "avatar": "/assets/avataar/level-UP-boy.jpg",
+        "badges": [
+            "/assets/badges/logic-pro.png"
+        ],
+        "coins": 1100
+    },
+    {
+        "name": "CloudCrusader",
+        "uid": "1030",
+        "xp": 3385,
+        "avatar": "/assets/avataar/intelectual-boy.jpg",
+        "badges": [
+            "/assets/badges/level-accended.png",
+            "/assets/badges/accuracy-ace.png",
+            "/assets/badges/streak-holder.png"
+        ],
+        "coins": 2100
+    }
 ]
 
 export default players;

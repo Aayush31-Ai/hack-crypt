@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useAuth } from "../context/useAuth";
@@ -8,13 +8,20 @@ import { useAuth } from "../context/useAuth";
 const Login = () => {
   const { person } = useParams();
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { login, user } = useAuth();
 
   const [username, setUsername] = useState("");
   const [uid, setUid] = useState("");
   const [minUid, setMinUid] = useState("");
   const [maxUid, setMaxUid] = useState("");
-  const [subject, setSubject] = useState("");
+  const [subjects, setSubjects] = useState([]);
+
+  // Check if teacher is already logged in and redirect
+  useEffect(() => {
+    if (person === "teacher" && user && user.type === "teacher") {
+      navigate("/teacher");
+    }
+  }, [person, user, navigate]);
 
   const handleLogin = () => {
     if (!username) {
@@ -22,10 +29,28 @@ const Login = () => {
       return;
     }
 
-    if (person === "student") {
+    if (person === "student") {Ba
       if (!uid) {
         toast.error("UID is required for student");
         return;
+      }
+
+      // Check if UID is within teacher's allowed range
+      const teacherRange = localStorage.getItem('teacherUidRange');
+      if (teacherRange) {
+        try {
+          const { minUid: teacherMin, maxUid: teacherMax } = JSON.parse(teacherRange);
+          const studentUid = Number(uid);
+          const min = Number(teacherMin);
+          const max = Number(teacherMax);
+          
+          if (studentUid < min || studentUid > max) {
+            toast.error(`UID must be between ${teacherMin} and ${teacherMax}`);
+            return;
+          }
+        } catch (error) {
+          console.error('Error validating UID range:', error);
+        }
       }
 
       // Store student data in context and localStorage
@@ -40,7 +65,7 @@ const Login = () => {
     }
 
     if (person === "teacher") {
-      if (!subject || !minUid || !maxUid) {
+      if (!subjects.length || !minUid || !maxUid) {
         toast.error("All teacher fields are required");
         return;
       }
@@ -54,13 +79,16 @@ const Login = () => {
       login({
         type: "teacher",
         username,
-        subject,
+        subjects,
         minUid,
         maxUid,
       });
 
+      // Store teacher's UID range for student validation
+      localStorage.setItem('teacherUidRange', JSON.stringify({ minUid, maxUid }));
+
       toast.success("Teacher logged in successfully 👨‍🏫");
-      navigate("/world");
+      navigate("/teacher");
     }
   };
 
@@ -91,13 +119,13 @@ const Login = () => {
             </h1>
             <p className="text-center text-[#B19EEF]/70 text-sm mb-8 font-light">Level Up Your Skills</p>
 
-          {/* Username */}
+          {/* Username / Game Master name */}
           <div className="mb-5">
-            <label className="text-sm font-bold text-[#B19EEF] uppercase tracking-wider">🎮 Username</label>
+            <label className="text-sm font-bold text-[#B19EEF] uppercase tracking-wider">{person === "teacher" ? "🎮 Enter the Game Master name" : "🎮 Username"}</label>
             <input
               className="w-full mt-2 p-3 rounded-lg bg-black/80 border-2 border-[#B19EEF]/50 focus:border-[#B19EEF] focus:outline-none text-white placeholder-gray-400 transition-all duration-300 font-medium"
               type="text"
-              placeholder="Enter your player name"
+              placeholder={person === "teacher" ? "Enter the Game Master name" : "Enter your player name"}
               value={username}
               onChange={(e) => setUsername(e.target.value)}
             />
@@ -121,22 +149,31 @@ const Login = () => {
           {person === "teacher" && (
             <>
               <div className="mb-5">
-                <label className="text-sm font-bold text-[#B19EEF] uppercase tracking-wider">Subject</label>
-                <select
-                  className="w-full mt-2 p-3 rounded-lg bg-black/80 border-2 border-[#B19EEF]/50 focus:border-[#B19EEF] focus:outline-none text-white transition-all duration-300 font-medium"
-                  value={subject}
-                  onChange={(e) => setSubject(e.target.value)}
-                >
-                  <option value="">Select your subject</option>
-                  <option>Maths</option>
-                  <option>Python</option>
-                  <option>HTML</option>
-                  <option>CSS</option>
-                  <option>JavaScript</option>
-                  <option>Java</option>
-                  <option>C++</option>
-                  <option>DSA</option>
-                </select>
+                <label className="text-sm font-bold text-[#B19EEF] uppercase tracking-wider">Subjects</label>
+                <div className="mt-2 grid grid-cols-3 gap-3">
+                  {[
+                    { label: "Python", value: "Python" },
+                    { label: "JavaScript", value: "JavaScript" },
+                    { label: "Maths", value: "Maths" },
+                  ].map((opt) => (
+                    <label key={opt.value} className="flex items-center gap-2 text-sm">
+                      <input
+                        type="checkbox"
+                        className="accent-[#B19EEF]"
+                        checked={subjects.includes(opt.value)}
+                        onChange={(e) => {
+                          setSubjects((prev) =>
+                            e.target.checked
+                              ? [...prev, opt.value]
+                              : prev.filter((s) => s !== opt.value)
+                          );
+                        }}
+                      />
+                      <span className="text-white">{opt.label }</span>
+                    </label>
+                  ))}
+                </div>
+                <p className="text-xs text-[#B19EEF]/70 mt-2">Choose one or more subjects</p>
               </div>
 
               <div className="flex gap-3 mb-5">

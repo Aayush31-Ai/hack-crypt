@@ -1,6 +1,7 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { worldsData } from "../data/worldData";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { completeStage, saveQuizScore, getPlayerData, updatePlayerXP } from "../services/localStorage";
 
 const QuizPage = () => {
   const { worldId, zoneId, stageId } = useParams();
@@ -108,8 +109,16 @@ const QuizPage = () => {
             <p className="text-lg mb-6">
               Score: {score} / {stage.questions.length}
             </p>
+            <p className="text-sm text-gray-400 mb-4">
+              XP Earned: +{Math.round((score / stage.questions.length) * 50)}
+            </p>
             <button
-              onClick={() => navigate(`/world/${worldId}`)}
+              onClick={() => {
+                // Save quiz completion to localStorage
+                completeStage(worldId, zoneId, stageId, Math.round((score / stage.questions.length) * 100));
+                saveQuizScore(worldId, zoneId, stageId, score, stage.questions.length);
+                navigate(`/world/${worldId}`);
+              }}
               className="mt-4 px-6 py-3 bg-[#B19EEF] text-black font-semibold rounded-lg hover:bg-[#9d85e0] transition-colors cursor-pointer"
             >
               Back to World

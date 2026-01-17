@@ -1,8 +1,22 @@
 import React, { useEffect, useState } from 'react'
 import players from '@/playerData/player'
+import { getPlayerData } from '@/services/localStorage'
 
 function LeaderBoard() {
-    const sortedPlayers = [...players].sort((a, b) => b.xp - a.xp);
+    const [leaderboardData, setLeaderboardData] = useState([]);
+
+    useEffect(() => {
+        const playerData = getPlayerData();
+        const playerXp = playerData?.xp || 0;
+        
+        // Combine static players with updated player from localStorage
+        const updatedPlayers = players.map(p => 
+            p.uid === playerData?.uid ? { ...p, xp: playerXp } : p
+        );
+        
+        const sortedPlayers = [...updatedPlayers].sort((a, b) => b.xp - a.xp);
+        setLeaderboardData(sortedPlayers);
+    }, []);
 
     return (
         <section className="min-h-screen bg-gradient-to-b from-[#0b1020] to-[#050814] text-white px-6 py-10">
@@ -30,7 +44,7 @@ function LeaderBoard() {
 
                 {/* Rows */}
                 <div className="divide-y divide-white/10">
-                    {sortedPlayers.map((player, index) => (
+                    {leaderboardData.map((player, index) => (
                         <div
                             key={player.uid}
                             className="grid grid-cols-3 px-6 py-4 items-center hover:bg-white/5 transition"

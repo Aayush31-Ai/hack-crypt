@@ -1,13 +1,34 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { worldsData } from "../data/worldData";
+import { useAuth } from "../context/useAuth";
 
 const Worlds = () => {
+  const { user } = useAuth();
+  
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
 
   const navigate = useNavigate();
+
+  // Filter worlds based on teacher's selected subjects
+  const filteredWorlds = React.useMemo(() => {
+    if (user?.type === "teacher" && Array.isArray(user?.subjects) && user.subjects.length > 0) {
+      // Map subject names to world IDs
+      const subjectToWorldMap = {
+        "Python": "python",
+        "JavaScript": "javascript",
+        "Maths": "maths"
+      };
+      
+      const allowedWorldIds = user.subjects.map(subject => subjectToWorldMap[subject]).filter(Boolean);
+      return worldsData.filter(world => allowedWorldIds.includes(world.id));
+    }
+    // For students or if no subjects specified, show all worlds
+    return worldsData;
+  }, [user]);
+
   return (
     <div className="min-h-screen bg-black text-white px-10 py-12">
 
@@ -17,13 +38,15 @@ const Worlds = () => {
           Choose Your <span className="text-[#B19EEF]">World</span>
         </h1>
         <p className="text-gray-400 mt-2">
-          Each world is a new learning adventure. Progress through zones and stages to level up.
+          {user?.type === "teacher" && user?.subjects?.length > 0 
+            ? `Showing worlds for: ${user.subjects.join(', ')}` 
+            : "Each world is a new learning adventure. Progress through zones and stages to level up."}
         </p>
       </div>
 
       {/* Worlds Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
-        {worldsData.map((world) => (
+        {filteredWorlds.map((world) => (
           <div
             key={world.id}
             onClick={() => navigate(`/world/${world.id}`)}
@@ -36,7 +59,7 @@ const Worlds = () => {
           >
             {/* World Title */}
             <div className="h-40">
-                <img className="object-cover h-full w-full" src="\assets\png&gif\gif\grass&Rock-snake.gif" alt="" />
+                <img className="object-cover h-full w-full" src={world.image} alt={world.name} />
             </div>
             <h2 className="text-2xl mt-4 font-bold mb-1">{world.name}</h2>
             <p className="text-sm text-gray-400 mb-6">{world.subtitle}</p>

@@ -2,19 +2,10 @@ import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search, Users, Trophy, BarChart2, ShieldCheck, AlertCircle } from 'lucide-react';
 import players from '../playerData/player';
-import { useAuth } from '../context/useAuth';
 
 const TeacherPanel = () => {
   const navigate = useNavigate();
-  const { user, isTeacher, loading } = useAuth();
   const [query, setQuery] = useState('');
-
-  // Access control
-  useEffect(() => {
-    if (!loading && !isTeacher()) {
-      navigate('/login/teacher');
-    }
-  }, [loading, isTeacher, navigate]);
 
   // Derived data
   const totalStudents = players.length;
@@ -31,34 +22,6 @@ const TeacherPanel = () => {
     );
   }, [query]);
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center text-slate-700">
-        Loading...
-      </div>
-    );
-  }
-
-  if (!isTeacher()) {
-    return (
-      <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center text-slate-800 px-6">
-        <div className="max-w-xl w-full bg-white border border-slate-200 rounded-2xl p-8 shadow-lg text-center">
-          <div className="flex items-center justify-center mb-4 text-amber-500">
-            <AlertCircle size={32} />
-          </div>
-          <h1 className="text-2xl font-bold mb-2">Access restricted</h1>
-          <p className="text-slate-500 mb-6">This panel is only for teachers. Please login as a teacher to continue.</p>
-          <button
-            onClick={() => navigate('/login/teacher')}
-            className="px-6 py-3 rounded-xl bg-amber-500 text-white font-semibold hover:bg-amber-600 transition"
-          >
-            Go to Teacher Login
-          </button>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 py-12 px-4">
       <div className="max-w-6xl mx-auto space-y-8">
@@ -67,13 +30,7 @@ const TeacherPanel = () => {
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
             <div>
               <p className="text-sm uppercase tracking-[0.2em] text-slate-400 mb-1">Teacher Panel</p>
-              <h1 className="text-3xl md:text-4xl font-black text-slate-900">Welcome, {user?.username || 'Teacher'}</h1>
-              {user?.subject && (
-                <p className="text-slate-500 mt-1">Subject: {user.subject}</p>
-              )}
-              {(user?.minUid || user?.maxUid) && (
-                <p className="text-slate-500 text-sm">UID Range: {user?.minUid || '—'} - {user?.maxUid || '—'}</p>
-              )}
+              <h1 className="text-3xl md:text-4xl font-black text-slate-900">Welcome, Teacher</h1>
             </div>
             <div className="flex gap-3">
               <div className="flex items-center gap-3 px-4 py-3 bg-slate-100 rounded-2xl border border-slate-200 shadow-sm">

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ResponsiveContainer, BarChart, Bar, XAxis, CartesianGrid, Tooltip } from 'recharts';
+import { ResponsiveContainer, BarChart, Bar, XAxis, CartesianGrid, Tooltip, Cell } from 'recharts';
 import { Search, Users, Trophy, BarChart2, ShieldCheck, AlertCircle } from 'lucide-react';
 import players from '../../playerData/player';
 import { useAuth } from '../../context/useAuth';
@@ -9,6 +9,10 @@ const TeacherPanel = () => {
   const navigate = useNavigate();
   const { user, isTeacher, loading } = useAuth();
   const [query, setQuery] = useState('');
+
+useEffect(()=>{
+    window.scrollTo({top:0,behavior:"smooth"})
+},[])
 
   // Access control: redirect if not teacher
   useEffect(() => {
@@ -75,14 +79,17 @@ const TeacherPanel = () => {
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 py-12 px-4">
       <div className="max-w-6xl mx-auto space-y-8">
+        <button onClick={()=>navigate("/")} className="mb-4 px-4 py-2 bg-slate-200 text-slate-700 rounded-lg hover:bg-slate-300 transition">
+            Back
+        </button>
         {/* Header */}
         <div className="bg-white border border-slate-200 rounded-3xl p-8 shadow-xl">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
             <div>
               <p className="text-sm uppercase tracking-[0.2em] text-slate-400 mb-1">Teacher Panel</p>
               <h1 className="text-3xl md:text-4xl font-black text-slate-900">Welcome, {user?.username || 'Teacher'}</h1>
-              {user?.subject && (
-                <p className="text-slate-500 mt-1">Subject: {user.subject}</p>
+              {Array.isArray(user?.subjects) && user.subjects.length > 0 && (
+                <p className="text-slate-500 mt-1">Subjects: {user.subjects.join(', ')}</p>
               )}
               {(user?.minUid || user?.maxUid) && (
                 <p className="text-slate-500 text-sm">UID Range: {user?.minUid || '—'} - {user?.maxUid || '—'}</p>

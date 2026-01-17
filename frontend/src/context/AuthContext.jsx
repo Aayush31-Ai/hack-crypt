@@ -29,7 +29,7 @@ export const AuthProvider = ({ children }) => {
       type: userData.type, // 'student' or 'teacher'
       username: userData.username,
       uid: userData.uid,
-      subject: userData.subject,
+      subjects: userData.subjects,
       minUid: userData.minUid,
       maxUid: userData.maxUid,
       avatar: userData.avatar || 'default_avatar',
