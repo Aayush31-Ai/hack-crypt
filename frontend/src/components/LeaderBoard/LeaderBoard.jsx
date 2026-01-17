@@ -26,7 +26,6 @@ function LeaderBoard() {
                     <span>Rank</span>
                     <span>Player</span>
                     <span className="text-right">XP</span>
-                    <span className="text-right">Coins</span>
                 </div>
 
                 {/* Rows */}
@@ -54,11 +53,6 @@ function LeaderBoard() {
                             {/* XP */}
                             <span className="text-right text-blue-400 font-semibold">
                                 {player.xp}
-                            </span>
-
-                            {/* Coins */}
-                            <span className="text-right text-yellow-400 font-semibold">
-                                🪙 {player.coins}
                             </span>
                         </div>
                     ))}
