@@ -37,15 +37,72 @@ function Profile() {
   const sortedPlayers = [...players].sort((a, b) => b.xp - a.xp);
   const rankIndex = sortedPlayers.findIndex((p) => p.uid === displayUser.uid);
   const userRank = rankIndex >= 0 ? rankIndex + 1 : players.length;
-  const userBadges = playerData?.badges || displayUser.badges || [];
+  const userBadges = (playerData?.badges && playerData.badges.length > 0)
+    ? playerData.badges
+    : (displayUser.badges || []);
+  
+  // Catalog to normalize badges from localStorage objects or image paths
+  const badgeCatalog = {
+    'speed-thinker': {
+      img: '/assets/badges/speed-thinker.png',
+      desc: 'Speed Thinker - Quick problem solver',
+    },
+    'streak-holder': {
+      img: '/assets/badges/streak-holder.png',
+      desc: 'Streak Holder - Consistent learner',
+    },
+    'logic-pro': {
+      img: '/assets/badges/logic-pro.png',
+      desc: 'Logic Pro - Expert in logic',
+    },
+    'concept-cracked': {
+      img: '/assets/badges/concept-cracked.png',
+      desc: 'Concept Cracked - Master of concepts',
+    },
+    'level-accended': {
+      img: '/assets/badges/level-accended.png',
+      desc: 'Level Ascended - Reached new heights',
+    },
+    'accuracy-ace': {
+      img: '/assets/badges/accuracy-ace.png',
+      desc: 'Accuracy Ace - High precision answers',
+    },
+    'mastery-unlocked': {
+      img: '/assets/badges/mastery-unlocked.png',
+      desc: 'Mastery Unlocked - Significant milestone achieved',
+    },
+    'problem-solver': {
+      img: '/assets/badges/problem-solver.png',
+      desc: 'Problem Solver - Tough challenges completed',
+    },
+  };
 
-  // Badge descriptions
-  const badgeDescriptions = {
-    'speed-thinker.png': 'Speed Thinker - Quick problem solver',
-    'streak-holder.png': 'Streak Holder - Consistent learner',
-    'logic-pro.png': 'Logic Pro - Expert in logic',
-    'concept-cracked.png': 'Concept Cracked - Master of concepts',
-    'level-accended.png': 'Level Ascended - Reached new heights'
+  const normalizeBadges = (badges) => {
+    if (!Array.isArray(badges)) return [];
+    return badges
+      .map((b) => {
+        if (typeof b === 'string') {
+          const base = b.split('/').pop()?.replace('.png', '') || 'badge';
+          const catalog = badgeCatalog[base];
+          return {
+            img: b,
+            name: base,
+            desc: catalog?.desc || 'Achievement',
+          };
+        }
+        if (b && typeof b === 'object') {
+          const key = (b.id || b.name || '').toString().toLowerCase().replace(/\s+/g, '-');
+          const catalog = badgeCatalog[key];
+          return {
+            img: catalog?.img || (key ? `/assets/badges/${key}.png` : '/assets/badges/logic-pro.png'),
+            name: b.name || key || 'Badge',
+            desc: catalog?.desc || 'Achievement',
+            earnedAt: b.earnedAt,
+          };
+        }
+        return null;
+      })
+      .filter(Boolean);
   };
 
   const handleSaveAbout = () => {
@@ -207,31 +264,23 @@ function Profile() {
                 <h2 className="text-2xl font-bold bg-gradient-to-r from-violet-300 to-purple-300 bg-clip-text text-transparent">Badges & Achievements</h2>
               </div>
 
-              {userBadges.length > 0 ? (
+              {normalizeBadges(userBadges).length > 0 ? (
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                  {userBadges.map((badge, index) => {
-                    const badgeName = badge.split('/').pop();
-                    const description = badgeDescriptions[badgeName] || 'Achievement';
-
-                    return (
-                      <div
-                        key={index}
-                        className="group/badge relative"
-                      >
-                        <div className="absolute -inset-1 bg-gradient-to-br from-violet-600/60 to-purple-600/60 rounded-xl blur-lg opacity-0 group-hover/badge:opacity-40 transition-all duration-300"></div>
-                        <div className="relative bg-gradient-to-br from-violet-900/20 to-purple-900/20 border border-violet-500/30 rounded-xl p-4 backdrop-blur-md hover:border-violet-400/50 transition-all group-hover/badge:-translate-y-2">
-                          <div className="flex flex-col items-center text-center space-y-3">
-                            <img
-                              src={badge}
-                              alt={description}
-                              className="w-16 h-16 rounded-lg object-cover group-hover/badge:scale-125 transition-transform duration-300 drop-shadow-lg"
-                            />
-                            <p className="text-xs font-semibold text-violet-300 line-clamp-2">{description}</p>
-                          </div>
+                  {normalizeBadges(userBadges).map((badge, index) => (
+                    <div key={index} className="group/badge relative">
+                      <div className="absolute -inset-1 bg-gradient-to-br from-violet-600/60 to-purple-600/60 rounded-xl blur-lg opacity-0 group-hover/badge:opacity-40 transition-all duration-300"></div>
+                      <div className="relative bg-gradient-to-br from-violet-900/20 to-purple-900/20 border border-violet-500/30 rounded-xl p-4 backdrop-blur-md hover:border-violet-400/50 transition-all group-hover/badge:-translate-y-2">
+                        <div className="flex flex-col items-center text-center space-y-3">
+                          <img
+                            src={badge.img}
+                            alt={badge.desc}
+                            className="w-16 h-16 rounded-lg object-cover group-hover/badge:scale-125 transition-transform duration-300 drop-shadow-lg"
+                          />
+                          <p className="text-xs font-semibold text-violet-300 line-clamp-2">{badge.desc}</p>
                         </div>
                       </div>
-                    );
-                  })}
+                    </div>
+                  ))}
                 </div>
               ) : (
                 <div className="text-center py-12">
@@ -267,7 +316,7 @@ function Profile() {
             <div className="relative bg-gradient-to-br from-violet-900/20 to-purple-900/20 border border-violet-500/30 rounded-2xl p-8 backdrop-blur-md hover:border-violet-400/50 transition-all text-center">
               <p className="text-violet-300/60 text-sm font-semibold uppercase tracking-widest mb-3">Total</p>
               <p className="text-5xl font-black bg-gradient-to-r from-yellow-300 to-amber-300 bg-clip-text text-transparent">
-                {userBadges.length + 5}
+                {normalizeBadges(userBadges).length + 5}
               </p>
             </div>
           </div>

@@ -16,7 +16,10 @@ const DEFAULT_PLAYER = {
   avatar: '/assets/avataar/avatar1.png',
   level: 1,
   xp: 0,
-  badges: [],
+  badges: [
+    { id: 'mastery-unlocked', name: 'Mastery Unlocked', earnedAt: new Date().toISOString() },
+    { id: 'problem-solver', name: 'Problem Solver', earnedAt: new Date().toISOString() },
+  ],
   inventory: [],
 };
 
@@ -24,7 +27,12 @@ const DEFAULT_PLAYER = {
 export const getPlayerData = () => {
   try {
     const data = localStorage.getItem(STORAGE_KEYS.PLAYER_DATA);
-    return data ? JSON.parse(data) : DEFAULT_PLAYER;
+    if (data) {
+      return JSON.parse(data);
+    }
+    // Seed defaults into storage on first run
+    localStorage.setItem(STORAGE_KEYS.PLAYER_DATA, JSON.stringify(DEFAULT_PLAYER));
+    return DEFAULT_PLAYER;
   } catch (error) {
     console.error('Error reading player data:', error);
     return DEFAULT_PLAYER;
