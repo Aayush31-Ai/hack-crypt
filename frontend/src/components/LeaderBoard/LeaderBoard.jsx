@@ -8,17 +8,24 @@ function LeaderBoard() {
         <section className="min-h-screen bg-gradient-to-b from-[#0b1020] to-[#050814] text-white px-6 py-10">
             {/* Title */}
             <h1 className="text-4xl font-extrabold text-center mb-10 tracking-wide">
-                🏆 Leaderboard
+                <div className="flex items-center justify-center gap-3">
+                    <img
+                        className="w-12 h-12"
+                        src="/assets/png&gif/png/trophy.png"
+                        alt="trophy"
+                    />
+                    <span className="font-pixel">Leaderboard</span>
+                </div>
             </h1>
+
 
             {/* Table Wrapper */}
             <div className="max-w-5xl mx-auto bg-[#0f172a] rounded-2xl shadow-lg border border-white/10 overflow-hidden">
                 {/* Header */}
-                <div className="grid grid-cols-4 px-6 py-4 text-sm font-semibold text-gray-300 bg-[#020617]">
+                <div className="grid grid-cols-3 px-6 py-4 text-sm font-semibold text-gray-300 bg-[#020617]">
                     <span>Rank</span>
                     <span>Player</span>
                     <span className="text-right">XP</span>
-                    <span className="text-right">Coins</span>
                 </div>
 
                 {/* Rows */}
@@ -26,7 +33,7 @@ function LeaderBoard() {
                     {sortedPlayers.map((player, index) => (
                         <div
                             key={player.uid}
-                            className="grid grid-cols-4 px-6 py-4 items-center hover:bg-white/5 transition"
+                            className="grid grid-cols-3 px-6 py-4 items-center hover:bg-white/5 transition"
                         >
                             {/* Rank */}
                             <span className="font-bold text-purple-400">
@@ -46,11 +53,6 @@ function LeaderBoard() {
                             {/* XP */}
                             <span className="text-right text-blue-400 font-semibold">
                                 {player.xp}
-                            </span>
-
-                            {/* Coins */}
-                            <span className="text-right text-yellow-400 font-semibold">
-                                🪙 {player.coins}
                             </span>
                         </div>
                     ))}

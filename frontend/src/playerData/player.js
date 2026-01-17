@@ -20,7 +20,7 @@ const players = [
             "/assets/badges/concept-cracked.png",
             "/assets/badges/logic-pro.png"
         ],
-        "coins": 50
+        "coins": 500
     },
     {
         "name": "JSWizard",

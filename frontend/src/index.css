@@ -1,6 +1,11 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+@font-face {
+  font-family: "PixelFont";
+  src: url("/src/assets/fonts/PixelFont.ttf") format("truetype");
+}
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -117,28 +122,29 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
 
-@font-face {
+  @font-face {
     font-family: "PixelGrid";
     src: url("/assets/fonts/pixelgrid-squareboldm.woff") format("woff");
     font-weight: 500;
     font-style: normal;
-}
+  }
 
-@font-face {
+  @font-face {
     font-family: "PixelGrid";
     src: url("/assets/fonts/pixelgrid-squarebolds.woff") format("woff");
     font-weight: 600;
     font-style: normal;
-}
+  }
 
-@font-face {
+  @font-face {
     font-family: "PixelGrid";
     src: url("/assets/fonts/pixelgrid-squareboldxl.woff") format("woff");
     font-weight: 700;
     font-style: normal;
-}
+  }
 }

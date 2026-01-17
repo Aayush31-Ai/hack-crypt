@@ -218,66 +218,247 @@ const QuizShogun = () => {
     }, [playerHP, botHP]);
 
     return (
-        <div style={{ textAlign: 'center', background: '#000', color: '#fff', minHeight: '100vh', padding: '20px', fontFamily: 'monospace' }}>
-            <h1 style={{ color: '#ffd700', textTransform: 'uppercase', letterSpacing: '10px' }}>QUIZ SHOGUN</h1>
+        <div
+            style={{
+                minHeight: "100vh",
+                background: "#000",
+                color: "#fff",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                padding: "20px",
+                fontFamily: "monospace",
+                fontSize: "22px"
+            }}
+        >
+            {/* Title */}
+            <h1
+                style={{
+                    color: "#ffd700",
+                    letterSpacing: "8px",
+                    marginBottom: "30px",
+                }}
+            >
+                QUIZ SHOGUN
+            </h1>
 
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '20px', marginBottom: '20px' }}>
-
-                {/* Player Avatar & Bar */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-                    <div style={{ width: '60px', height: '60px', border: `2px solid ${playerHP > 0 ? '#4facfe' : '#555'}`, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#111', fontSize: '24px' }}>
-                        {playerHP > 0 ? '👤' : '💀'}
+            {/* HUD */}
+            <div
+                style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: "40px",
+                    marginBottom: "20px",
+                    width: "100%",
+                    maxWidth: "700px",
+                }}
+            >
+                {/* Player */}
+                <div
+                    style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "12px",
+                        width: "250px",
+                    }}
+                >
+                    <div
+                        style={{
+                            width: "60px",
+                            height: "60px",
+                            borderRadius: "50%",
+                            border: `2px solid ${playerHP > 0 ? "#4facfe" : "#555"}`,
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            background: "#111",
+                            fontSize: "24px",
+                        }}
+                    >
+                        {playerHP > 0 ? "👤" : "💀"}
                     </div>
-                    <div style={{ textAlign: 'left' }}>
-                        <div style={{ fontSize: '10px', color: '#4facfe' }}>SAMURAI_1</div>
-                        <div style={{ width: '200px', height: '10px', background: '#222', border: '1px solid #4facfe' }}>
-                            <div style={{ width: `${playerHP}%`, height: '100%', background: '#4facfe', transition: '0.4s' }} />
+
+                    <div style={{ flex: 1 }}>
+                        <div style={{ fontSize: "10px", color: "#4facfe" }}>
+                            SAMURAI_1
+                        </div>
+                        <div
+                            style={{
+                                height: "10px",
+                                background: "#222",
+                                border: "1px solid #4facfe",
+                            }}
+                        >
+                            <div
+                                style={{
+                                    width: `${playerHP}%`,
+                                    height: "100%",
+                                    background: "#4facfe",
+                                    transition: "0.3s",
+                                }}
+                            />
                         </div>
                     </div>
                 </div>
 
-                <div style={{ fontSize: '20px', color: '#ffcc00' }}>VS</div>
+                {/* VS */}
+                <div
+                    style={{
+                        fontSize: "22px",
+                        color: "#ffcc00",
+                        fontWeight: "bold",
+                    }}
+                >
+                    VS
+                </div>
 
-                {/* Bot Avatar & Bar */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '15px', flexDirection: 'row-reverse' }}>
-                    <div style={{ width: '60px', height: '60px', border: `2px solid ${botHP > 0 ? '#f093fb' : '#555'}`, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#111', fontSize: '24px' }}>
-                        {botHP > 0 ? '🤖' : '💀'}
+                {/* Bot */}
+                <div
+                    style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "12px",
+                        width: "250px",
+                        flexDirection: "row-reverse",
+                    }}
+                >
+                    <div
+                        style={{
+                            width: "60px",
+                            height: "60px",
+                            borderRadius: "50%",
+                            border: `2px solid ${botHP > 0 ? "#f093fb" : "#555"}`,
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            background: "#111",
+                            fontSize: "24px",
+                        }}
+                    >
+                        {botHP > 0 ? "🤖" : "💀"}
                     </div>
-                    <div style={{ textAlign: 'right' }}>
-                        <div style={{ fontSize: '10px', color: '#f093fb' }}>REBEL_BOT</div>
-                        <div style={{ width: '200px', height: '10px', background: '#222', border: '1px solid #f093fb' }}>
-                            <div style={{ width: `${botHP}%`, height: '100%', background: '#f093fb', transition: '0.4s' }} />
+
+                    <div style={{ flex: 1, textAlign: "right" }}>
+                        <div style={{ fontSize: "10px", color: "#f093fb" }}>
+                            REBEL_BOT
+                        </div>
+                        <div
+                            style={{
+                                height: "10px",
+                                background: "#222",
+                                border: "1px solid #f093fb",
+                            }}
+                        >
+                            <div
+                                style={{
+                                    width: `${botHP}%`,
+                                    height: "100%",
+                                    background: "#f093fb",
+                                    transition: "0.3s",
+                                }}
+                            />
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div style={{ color: '#ffcc00', height: '20px', marginBottom: '10px', fontWeight: 'bold' }}>{statusMsg}</div>
-
-            <canvas ref={canvasRef} width={600} height={300} style={{ borderBottom: '2px solid #333', borderRadius: '10px' }} />
-
-            <div style={{ marginTop: '20px' }}>
-                {!gameOver ? (
-                    <div style={{ maxWidth: '600px', margin: '0 auto', background: '#0a0a0a', padding: '20px', border: '1px solid #222' }}>
-                        <h2 style={{ fontSize: '1.2rem', color: '#888', marginBottom: '20px' }}>{QUESTIONS[currentQ].q}</h2>
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-                            {QUESTIONS[currentQ].options.map((opt, i) => (
-                                <button key={i} disabled={!!attacking} onClick={() => handleAnswer(i)}
-                                    style={{ padding: '15px', cursor: 'pointer', background: '#111', color: '#fff', border: '1px solid #333', transition: '0.2s' }}>
-                                    {opt}
-                                </button>
-                            ))}
-                        </div>
-                    </div>
-                ) : (
-                    <div style={{ marginTop: '40px' }}>
-                        <h2 style={{ fontSize: '3rem', color: playerHP > 0 ? '#4facfe' : '#f093fb' }}>{playerHP > 0 ? 'VICTORY' : 'DEFEATED'}</h2>
-                        <button onClick={() => window.location.reload()} style={{ padding: '10px 40px', background: '#fff', cursor: 'pointer', border: 'none', fontWeight: 'bold' }}>RETRY</button>
-                    </div>
-                )}
+            {/* Status */}
+            <div
+                style={{
+                    height: "20px",
+                    marginBottom: "10px",
+                    color: "#ffcc00",
+                    fontWeight: "bold",
+                }}
+            >
+                {statusMsg}
             </div>
+
+            {/* Canvas */}
+            <canvas
+                ref={canvasRef}
+                width={600}
+                height={300}
+                style={{
+                    borderBottom: "2px solid #333",
+                    borderRadius: "10px",
+                    marginBottom: "20px",
+                }}
+            />
+
+            {/* Question Box */}
+            {!gameOver ? (
+                <div
+                    style={{
+                        maxWidth: "600px",
+                        width: "100%",
+                        background: "#0a0a0a",
+                        padding: "20px",
+                        border: "1px solid #222",
+                        height: "200px"
+                    }}
+                >
+                    <h2 style={{ color: "#aaa", marginBottom: "20px" }}>
+                        {QUESTIONS[currentQ].q}
+                    </h2>
+
+                    <div
+                        style={{
+                            display: "grid",
+                            gridTemplateColumns: "1fr 1fr",
+                            gap: "12px",
+                        }}
+                    >
+                        {QUESTIONS[currentQ].options.map((opt, i) => (
+                            <button
+                                key={i}
+                                disabled={!!attacking}
+                                onClick={() => handleAnswer(i)}
+                                style={{
+                                    padding: "14px",
+                                    background: "#111",
+                                    border: "1px solid #333",
+                                    color: "#fff",
+                                    cursor: "pointer",
+                                    height: "50px",
+                                    textAlign: "center"
+                                }}
+                            >
+                                {opt}
+                            </button>
+                        ))}
+                    </div>
+                </div>
+            ) : (
+                <div style={{ marginTop: "30px", textAlign: "center" }}>
+                    <h2
+                        style={{
+                            fontSize: "3rem",
+                            color: playerHP > 0 ? "#4facfe" : "#f093fb",
+                        }}
+                    >
+                        {playerHP > 0 ? "VICTORY" : "DEFEATED"}
+                    </h2>
+
+                    <button
+                        onClick={() => window.location.reload()}
+                        style={{
+                            padding: "10px 40px",
+                            background: "#fff",
+                            border: "none",
+                            cursor: "pointer",
+                            fontWeight: "bold",
+                            color: "black",
+                            fontSize: "22px"
+                        }}
+                    >
+                        RETRY
+                    </button>
+                </div>
+            )}
         </div>
-    );
-};
+    )
+}
 
 export default QuizShogun;

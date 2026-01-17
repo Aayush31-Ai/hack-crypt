@@ -7,37 +7,35 @@ import Profile from './components/Profile/Profile.jsx'
 import Store from './components/Store/Store.jsx'
 import Mario from './games/Mario.jsx'
 import Login from './components/Login'
-// import Testing from './components/Test/Testing.jsx'
-// import Testing2 from './components/Test/Testing2.jsx'
-// import Login from './components/Login.jsx'
-// import Home from './components/Home.jsx'
 import LandingPage from './components/home/LandingPage'
 import WorldDetail from './pages/WorldDetail'
 import QuizPage from './pages/QuizPage'
 import Worlds from './pages/World'
 import ChallengePage from './pages/ChallangePage'
 import Leaderboard from './components/LeaderBoard/LeaderBoard'
-// import BoardData from './components/LeaderBoard/BoardData'
+import ShopPage from './pages/ShopPage'
+import QuizShogun from './games/QuizShogun'
+import TeacherPanel from './components/Teacher/TeacherPanel'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
       <Route path='/' element={<App />}>
         <Route path='/profile' element={<Profile />} />
-        <Route path='/store' element={<Store />} />
+        <Route path='/profile/:uid' element={<Profile />} />
+        <Route path='/shop' element={<ShopPage />} />
         <Route path='/mario' element={<Mario />} />
         <Route path="/login/:person" element={<Login />} />
         <Route path="/" element={<LandingPage />} />
-        <Route path="world" element={<Worlds />} />
-        <Route path="/world/:worldId" element={<WorldDetail />} />
-        <Route path="/world/:worldId/zone/:zoneId/stage/:stageId" element={<QuizPage />} />
         <Route path="/challenge" element={<ChallengePage />} />
-        <Route path="/login/:person" element={<Login />} />
         <Route path="/" element={<LandingPage />} />
         <Route path="world" element={<Worlds />} />
         <Route path="/world/:worldId" element={<WorldDetail />} />
         <Route path="/world/:worldId/zone/:zoneId/stage/:stageId" element={<QuizPage />} />
         <Route path='/leaderboard' element={<Leaderboard />} />
+        <Route path='/mario' element={<Mario />} />
+        <Route path='/quizshogun' element={<QuizShogun />} />
+        <Route path='/teacher' element={<TeacherPanel />} />
 
       </Route>
     </>
