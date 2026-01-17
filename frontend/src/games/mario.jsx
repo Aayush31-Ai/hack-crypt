@@ -56,25 +56,66 @@ function reducer(state, action) {
 /* -------------------- QUESTIONS -------------------- */
 const QUESTIONS = [
     {
-        q: "What is 2 + 2?",
-        options: { A: "3", B: "4", C: "5", D: "6" },
-        correct: "B",
-        explanation: "2 + 2 equals 4. This is basic addition.",
-    },
-    {
-        q: "Capital of France?",
-        options: { A: "Berlin", B: "Madrid", C: "Paris", D: "Rome" },
+        q: "In Python, which method is used to add an element to the end of a list?",
+        options: { A: "push()", B: "add()", C: "append()", D: "insert()" },
         correct: "C",
-        explanation: "Paris is the capital city of France, known for the Eiffel Tower.",
+        explanation: "Python uses .append() to add a single item to the end of a list, whereas JS uses .push().",
     },
     {
-        q: "Largest planet?",
-        options: { A: "Earth", B: "Mars", C: "Venus", D: "Jupiter" },
+        q: "Which JavaScript keyword is used to declare a constant variable?",
+        options: { A: "var", B: "let", C: "constant", D: "const" },
         correct: "D",
-        explanation: "Jupiter is the largest planet in our solar system.",
+        explanation: "The 'const' keyword creates a read-only reference to a value which cannot be reassigned.",
     },
+    {
+        q: "What is the result of 3 + '3' in JavaScript?",
+        options: { A: "6", B: "33", C: "NaN", D: "Error" },
+        correct: "B",
+        explanation: "JavaScript performs type coercion, converting the number to a string and concatenating them.",
+    },
+    {
+        q: "In Python, how do you denote a block of code (like inside a loop or function)?",
+        options: { A: "Curly braces {}", B: "Parentheses ()", C: "Indentation", D: "Semicolons ;" },
+        correct: "C",
+        explanation: "Python uses whitespace/indentation to define the scope and structure of code blocks.",
+    },
+    {
+        q: "Which of the following is NOT a primitive data type in JavaScript?",
+        options: { A: "String", B: "Boolean", C: "Object", D: "Undefined" },
+        correct: "C",
+        explanation: "Objects are non-primitive (reference types). Strings, Booleans, and Undefined are primitives.",
+    },
+    {
+        q: "In Python, what does the 'len()' function do?",
+        options: { A: "Returns the type", B: "Clears a list", C: "Calculates memory", D: "Returns number of items" },
+        correct: "D",
+        explanation: "len() returns the number of items in an object like a list, string, or dictionary.",
+    },
+    {
+        q: "What is the correct way to write an Arrow Function in JavaScript?",
+        options: { A: "() => {}", B: "function => {}", C: "() -> {}", D: "def() => {}" },
+        correct: "A",
+        explanation: "Arrow functions use the 'fat arrow' syntax: () => {}.",
+    },
+    {
+        q: "In Python, which operator is used for floor division?",
+        options: { A: "/", B: "%", C: "//", D: "**" },
+        correct: "C",
+        explanation: "The // operator divides two numbers and rounds down the result to the nearest integer.",
+    },
+    {
+        q: "Which JS method is used to convert a JSON string into a JavaScript object?",
+        options: { A: "JSON.stringify()", B: "JSON.parse()", C: "JSON.objectify()", D: "JSON.toObj()" },
+        correct: "B",
+        explanation: "JSON.parse() takes a string and turns it into an object; JSON.stringify() does the opposite.",
+    },
+    {
+        q: "In Python, what is the output of bool(0)?",
+        options: { A: "True", B: "False", C: "None", D: "Error" },
+        correct: "B",
+        explanation: "In Python, the integer 0 is considered 'Falsy', while any non-zero number is 'Truthy'.",
+    }
 ];
-
 /* -------------------- PLATFORMS -------------------- */
 const PLATFORMS = [
     { x: 0, y: 450, width: 800, height: 50, color: "#8B4513" },
@@ -273,7 +314,7 @@ export default function Mario() {
         PLATFORMS.forEach((pl) => {
             ctx.fillStyle = pl.color;
             ctx.fillRect(pl.x, pl.y, pl.width, pl.height);
-            
+
             if (pl.letter) {
                 ctx.fillStyle = "#fff";
                 ctx.font = "bold 28px Arial";

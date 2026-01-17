@@ -1,10 +1,66 @@
 import React, { useState, useEffect, useRef } from 'react';
 
 const QUESTIONS = [
-    { q: "Which hook is used for side effects?", options: ["useState", "useEffect", "useRef", "useMemo"], correct: 1 },
-    { q: "React components must return...", options: ["A String", "JSX", "A Loop", "A Variable"], correct: 1 },
-    { q: "What passes data to components?", options: ["State", "Props", "Context", "Refs"], correct: 1 },
-    { q: "Virtual DOM improves...", options: ["Security", "Performance", "Storage", "Styling"], correct: 1 },
+    {
+        q: "In React, what is the purpose of 'key' prop in lists?",
+        options: { A: "To style elements", B: "To identify changed items", C: "To bind data", D: "To set index" },
+        correct: "B",
+        explanation: "Keys help React identify which items have changed, been added, or removed for efficient re-rendering.",
+    },
+    {
+        q: "In Python, which of these is used to handle exceptions?",
+        options: { A: "try...except", B: "try...catch", C: "do...while", D: "if...error" },
+        correct: "A",
+        explanation: "Python uses 'try' and 'except' blocks, whereas JavaScript and Java use 'try' and 'catch'.",
+    },
+    {
+        q: "What does the 'useMemo' hook do in React?",
+        options: { A: "Stores state", B: "Triggers effects", C: "Memoizes values", D: "Creates refs" },
+        correct: "C",
+        explanation: "useMemo returns a memoized value, recalculating it only when dependencies change to save performance.",
+    },
+    {
+        q: "Which JavaScript method creates a new array with all elements that pass a test?",
+        options: { A: "map()", B: "forEach()", C: "reduce()", D: "filter()" },
+        correct: "D",
+        explanation: "The filter() method creates a shallow copy of a portion of an array based on a provided condition.",
+    },
+    {
+        q: "In Python, how do you create a dictionary?",
+        options: { A: "[]", B: "()", C: "{}", D: "<>" },
+        correct: "C",
+        explanation: "Dictionaries are created using curly braces with key-value pairs (e.g., {'key': 'value'}).",
+    },
+    {
+        q: "In React, data is passed from parent to child via...",
+        options: { A: "State", B: "Props", C: "Hooks", D: "Redux" },
+        correct: "B",
+        explanation: "Props (short for properties) are the standard way to pass data down the component tree.",
+    },
+    {
+        q: "What is the 'self' parameter in Python class methods?",
+        options: { A: "A reserved keyword", B: "The class itself", C: "Instance of the class", D: "The global scope" },
+        correct: "C",
+        explanation: "'self' represents the instance of the object itself, allowing access to attributes and methods.",
+    },
+    {
+        q: "What is 'Hoisting' in JavaScript?",
+        options: { A: "Lifting an array", B: "Moving declarations to top", C: "Error handling", D: "Memory cleanup" },
+        correct: "B",
+        explanation: "Hoisting is JS's behavior of moving variable and function declarations to the top of their scope before execution.",
+    },
+    {
+        q: "In React, which hook is used to access the DOM directly?",
+        options: { A: "useState", B: "useContext", C: "useRef", D: "useReducer" },
+        correct: "C",
+        explanation: "useRef returns a mutable ref object whose .current property can hold a reference to a DOM node.",
+    },
+    {
+        q: "In Python, what is a 'decorator'?",
+        options: { A: "A UI theme", B: "A function modifier", C: "A type of list", D: "A variable namer" },
+        correct: "B",
+        explanation: "Decorators allow you to wrap another function to extend its behavior without permanently modifying it.",
+    }
 ];
 
 const QuizShogun = () => {
