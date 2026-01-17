@@ -1,84 +1,50 @@
 import React, { useState, useEffect, useRef } from 'react';
 
 const QUESTIONS = [
-    {
-        q: "In React, what is the purpose of 'key' prop in lists?",
-        options: { A: "To style elements", B: "To identify changed items", C: "To bind data", D: "To set index" },
-        correct: "B",
-        explanation: "Keys help React identify which items have changed, been added, or removed for efficient re-rendering.",
-    },
-    {
-        q: "In Python, which of these is used to handle exceptions?",
-        options: { A: "try...except", B: "try...catch", C: "do...while", D: "if...error" },
-        correct: "A",
-        explanation: "Python uses 'try' and 'except' blocks, whereas JavaScript and Java use 'try' and 'catch'.",
-    },
-    {
-        q: "What does the 'useMemo' hook do in React?",
-        options: { A: "Stores state", B: "Triggers effects", C: "Memoizes values", D: "Creates refs" },
-        correct: "C",
-        explanation: "useMemo returns a memoized value, recalculating it only when dependencies change to save performance.",
-    },
-    {
-        q: "Which JavaScript method creates a new array with all elements that pass a test?",
-        options: { A: "map()", B: "forEach()", C: "reduce()", D: "filter()" },
-        correct: "D",
-        explanation: "The filter() method creates a shallow copy of a portion of an array based on a provided condition.",
-    },
-    {
-        q: "In Python, how do you create a dictionary?",
-        options: { A: "[]", B: "()", C: "{}", D: "<>" },
-        correct: "C",
-        explanation: "Dictionaries are created using curly braces with key-value pairs (e.g., {'key': 'value'}).",
-    },
-    {
-        q: "In React, data is passed from parent to child via...",
-        options: { A: "State", B: "Props", C: "Hooks", D: "Redux" },
-        correct: "B",
-        explanation: "Props (short for properties) are the standard way to pass data down the component tree.",
-    },
-    {
-        q: "What is the 'self' parameter in Python class methods?",
-        options: { A: "A reserved keyword", B: "The class itself", C: "Instance of the class", D: "The global scope" },
-        correct: "C",
-        explanation: "'self' represents the instance of the object itself, allowing access to attributes and methods.",
-    },
-    {
-        q: "What is 'Hoisting' in JavaScript?",
-        options: { A: "Lifting an array", B: "Moving declarations to top", C: "Error handling", D: "Memory cleanup" },
-        correct: "B",
-        explanation: "Hoisting is JS's behavior of moving variable and function declarations to the top of their scope before execution.",
-    },
-    {
-        q: "In React, which hook is used to access the DOM directly?",
-        options: { A: "useState", B: "useContext", C: "useRef", D: "useReducer" },
-        correct: "C",
-        explanation: "useRef returns a mutable ref object whose .current property can hold a reference to a DOM node.",
-    },
-    {
-        q: "In Python, what is a 'decorator'?",
-        options: { A: "A UI theme", B: "A function modifier", C: "A type of list", D: "A variable namer" },
-        correct: "B",
-        explanation: "Decorators allow you to wrap another function to extend its behavior without permanently modifying it.",
-    }
+    { q: "Which keyword declares a block-scoped variable that can be reassigned?", options: ["var", "let", "const", "static"], correct: 1 },
+    { q: "What is the result of '1' + 1 in JavaScript?", options: ["2", "0", "undefined", "11"], correct: 3 },
+    { q: "Which keyword refers to the object from which a method was called?", options: ["this", "self", "parent", "super"], correct: 0 },
+    { q: "What is the primary way to pass data down to child components?", options: ["State", "Hooks", "Props", "Context"], correct: 2 },
+    { q: "Which hook provides a persistent reference that doesn't trigger re-renders?", options: ["useState", "useRef", "useMemo", "useEffect"], correct: 1 },
+    { q: "What is the process of syncing the Virtual DOM with the real DOM called?", options: ["Mounting", "Reconciliation", "Binding", "Lifting"], correct: 1 },
+    { q: "Which symbol is used to start a single-line comment in Python?", options: ["//", "/*", "--", "#"], correct: 3 },
+    { q: "What is the output of 10 // 3 in Python?", options: ["3.33", "3", "1", "0"], correct: 1 },
+    { q: "Which data structure in Python uses key-value pairs?", options: ["List", "Tuple", "Dictionary", "Set"], correct: 2 },
+    { q: "What keyword is used to import specific attributes from a module?", options: ["include", "require", "from", "get"], correct: 2 },
+    { q: "Which function converts a JSON string into an object?", options: ["stringify()", "parse()", "convert()", "objectify()"], correct: 1 },
+    { q: "What is the result of Boolean('') in JavaScript?", options: ["true", "false", "undefined", "null"], correct: 1 },
+    { q: "Which keyword prevents a class from being modified?", options: ["static", "const", "freeze", "seal"], correct: 2 },
+    { q: "What is the global object in a web browser?", options: ["window", "global", "document", "root"], correct: 0 },
+    { q: "Which hook handles a component's lifecycle side effects?", options: ["useState", "useMemo", "useRef", "useEffect"], correct: 3 },
+    { q: "What concept describes data flowing only from parent to child?", options: ["Two-way binding", "Unidirectional flow", "State lifting", "Prop drilling"], correct: 1 },
+    { q: "What must a functional component return to render nothing?", options: ["false", "undefined", "null", "void"], correct: 2 },
+    { q: "Which keyword is used to create a class in Python?", options: ["new", "def", "struct", "class"], correct: 3 },
+    { q: "What is the result of 2 ** 3 in Python?", options: ["6", "8", "5", "9"], correct: 1 }
 ];
 
 const QuizShogun = () => {
     const canvasRef = useRef(null);
     const [playerHP, setPlayerHP] = useState(100);
     const [botHP, setBotHP] = useState(100);
-    const [currentQ, setCurrentQ] = useState(0);
     const [gameOver, setGameOver] = useState(false);
     const [attacking, setAttacking] = useState(null);
     const [shaking, setShaking] = useState(null);
     const [statusMsg, setStatusMsg] = useState("ROUND 1 - FIGHT!");
 
+    // Randomization States
+    const [shuffledQuestions, setShuffledQuestions] = useState([]);
+    const [currentQ, setCurrentQ] = useState(0);
+
     const particles = useRef([]);
+
+    // Shuffle questions on mount
+    useEffect(() => {
+        const shuffled = [...QUESTIONS].sort(() => Math.random() - 0.5);
+        setShuffledQuestions(shuffled);
+    }, []);
 
     const drawSamurai = (ctx, x, y, color, isFlipped, isDead, isShaking) => {
         ctx.save();
-
-        // Shake effect
         let shakeX = isShaking ? (Math.random() - 0.5) * 20 : 0;
         ctx.translate(shakeX, 0);
 
@@ -95,7 +61,6 @@ const QuizShogun = () => {
             ctx.shadowColor = color;
             ctx.font = '50px serif';
             ctx.textAlign = 'center';
-            // Adjusting X to center the skull where the body was
             ctx.fillText('💀', x + 40, y + 80);
             ctx.restore();
             return;
@@ -183,8 +148,9 @@ const QuizShogun = () => {
     }, [playerHP, botHP, attacking, shaking]);
 
     const handleAnswer = (index) => {
-        if (gameOver || attacking) return;
-        const isCorrect = index === QUESTIONS[currentQ].correct;
+        if (gameOver || attacking || shuffledQuestions.length === 0) return;
+
+        const isCorrect = index === shuffledQuestions[currentQ].correct;
         const attacker = isCorrect ? 'player' : 'bot';
         const victim = isCorrect ? 'bot' : 'player';
 
@@ -200,7 +166,13 @@ const QuizShogun = () => {
             setTimeout(() => {
                 setShaking(null);
                 setAttacking(null);
-                setCurrentQ(c => (c + 1) % QUESTIONS.length);
+
+                // Move to next random question if available
+                if (currentQ < shuffledQuestions.length - 1) {
+                    setCurrentQ(c => c + 1);
+                } else {
+                    setGameOver(true);
+                }
             }, 300);
         }, 350);
     };
@@ -218,213 +190,51 @@ const QuizShogun = () => {
     }, [playerHP, botHP]);
 
     return (
-        <div
-            style={{
-                minHeight: "100vh",
-                background: "#000",
-                color: "#fff",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                padding: "20px",
-                fontFamily: "monospace",
-                fontSize: "22px"
-            }}
-        >
-            {/* Title */}
-            <h1
-                style={{
-                    color: "#ffd700",
-                    letterSpacing: "8px",
-                    marginBottom: "30px",
-                }}
-            >
-                QUIZ SHOGUN
-            </h1>
+        <div style={{ minHeight: "100vh", background: "#000", color: "#fff", display: "flex", flexDirection: "column", alignItems: "center", padding: "20px", fontFamily: "monospace", fontSize: "22px" }}>
+            <h1 style={{ color: "#ffd700", letterSpacing: "8px", marginBottom: "30px" }}>QUIZ SHOGUN</h1>
 
             {/* HUD */}
-            <div
-                style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    gap: "40px",
-                    marginBottom: "20px",
-                    width: "100%",
-                    maxWidth: "700px",
-                }}
-            >
-                {/* Player */}
-                <div
-                    style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "12px",
-                        width: "250px",
-                    }}
-                >
-                    <div
-                        style={{
-                            width: "60px",
-                            height: "60px",
-                            borderRadius: "50%",
-                            border: `2px solid ${playerHP > 0 ? "#4facfe" : "#555"}`,
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            background: "#111",
-                            fontSize: "24px",
-                        }}
-                    >
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "40px", marginBottom: "20px", width: "100%", maxWidth: "700px" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "12px", width: "250px" }}>
+                    <div style={{ width: "60px", height: "60px", borderRadius: "50%", border: `2px solid ${playerHP > 0 ? "#4facfe" : "#555"}`, display: "flex", alignItems: "center", justifyContent: "center", background: "#111", fontSize: "24px" }}>
                         {playerHP > 0 ? "👤" : "💀"}
                     </div>
-
                     <div style={{ flex: 1 }}>
-                        <div style={{ fontSize: "10px", color: "#4facfe" }}>
-                            SAMURAI_1
-                        </div>
-                        <div
-                            style={{
-                                height: "10px",
-                                background: "#222",
-                                border: "1px solid #4facfe",
-                            }}
-                        >
-                            <div
-                                style={{
-                                    width: `${playerHP}%`,
-                                    height: "100%",
-                                    background: "#4facfe",
-                                    transition: "0.3s",
-                                }}
-                            />
+                        <div style={{ fontSize: "10px", color: "#4facfe" }}>SAMURAI_1</div>
+                        <div style={{ height: "10px", background: "#222", border: "1px solid #4facfe" }}>
+                            <div style={{ width: `${playerHP}%`, height: "100%", background: "#4facfe", transition: "0.3s" }} />
                         </div>
                     </div>
                 </div>
 
-                {/* VS */}
-                <div
-                    style={{
-                        fontSize: "22px",
-                        color: "#ffcc00",
-                        fontWeight: "bold",
-                    }}
-                >
-                    VS
-                </div>
+                <div style={{ fontSize: "22px", color: "#ffcc00", fontWeight: "bold" }}>VS</div>
 
-                {/* Bot */}
-                <div
-                    style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "12px",
-                        width: "250px",
-                        flexDirection: "row-reverse",
-                    }}
-                >
-                    <div
-                        style={{
-                            width: "60px",
-                            height: "60px",
-                            borderRadius: "50%",
-                            border: `2px solid ${botHP > 0 ? "#f093fb" : "#555"}`,
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            background: "#111",
-                            fontSize: "24px",
-                        }}
-                    >
+                <div style={{ display: "flex", alignItems: "center", gap: "12px", width: "250px", flexDirection: "row-reverse" }}>
+                    <div style={{ width: "60px", height: "60px", borderRadius: "50%", border: `2px solid ${botHP > 0 ? "#f093fb" : "#555"}`, display: "flex", alignItems: "center", justifyContent: "center", background: "#111", fontSize: "24px" }}>
                         {botHP > 0 ? "🤖" : "💀"}
                     </div>
-
                     <div style={{ flex: 1, textAlign: "right" }}>
-                        <div style={{ fontSize: "10px", color: "#f093fb" }}>
-                            REBEL_BOT
-                        </div>
-                        <div
-                            style={{
-                                height: "10px",
-                                background: "#222",
-                                border: "1px solid #f093fb",
-                            }}
-                        >
-                            <div
-                                style={{
-                                    width: `${botHP}%`,
-                                    height: "100%",
-                                    background: "#f093fb",
-                                    transition: "0.3s",
-                                }}
-                            />
+                        <div style={{ fontSize: "10px", color: "#f093fb" }}>REBEL_BOT</div>
+                        <div style={{ height: "10px", background: "#222", border: "1px solid #f093fb" }}>
+                            <div style={{ width: `${botHP}%`, height: "100%", background: "#f093fb", transition: "0.3s" }} />
                         </div>
                     </div>
                 </div>
             </div>
 
-            {/* Status */}
-            <div
-                style={{
-                    height: "20px",
-                    marginBottom: "10px",
-                    color: "#ffcc00",
-                    fontWeight: "bold",
-                }}
-            >
-                {statusMsg}
-            </div>
+            <div style={{ height: "20px", marginBottom: "10px", color: "#ffcc00", fontWeight: "bold" }}>{statusMsg}</div>
 
-            {/* Canvas */}
-            <canvas
-                ref={canvasRef}
-                width={600}
-                height={300}
-                style={{
-                    borderBottom: "2px solid #333",
-                    borderRadius: "10px",
-                    marginBottom: "20px",
-                }}
-            />
+            <canvas ref={canvasRef} width={600} height={300} style={{ borderBottom: "2px solid #333", borderRadius: "10px", marginBottom: "20px" }} />
 
-            {/* Question Box */}
-            {!gameOver ? (
-                <div
-                    style={{
-                        maxWidth: "600px",
-                        width: "100%",
-                        background: "#0a0a0a",
-                        padding: "20px",
-                        border: "1px solid #222",
-                        height: "200px"
-                    }}
-                >
-                    <h2 style={{ color: "#aaa", marginBottom: "20px" }}>
-                        {QUESTIONS[currentQ].q}
+            {!gameOver && shuffledQuestions.length > 0 ? (
+                <div style={{ maxWidth: "600px", width: "100%", background: "#0a0a0a", padding: "20px", border: "1px solid #222", height: "200px" }}>
+                    <h2 style={{ color: "#aaa", marginBottom: "20px", fontSize: "15px" }}>
+                        {shuffledQuestions[currentQ].q}
                     </h2>
-
-                    <div
-                        style={{
-                            display: "grid",
-                            gridTemplateColumns: "1fr 1fr",
-                            gap: "12px",
-                        }}
-                    >
-                        {QUESTIONS[currentQ].options.map((opt, i) => (
-                            <button
-                                key={i}
-                                disabled={!!attacking}
-                                onClick={() => handleAnswer(i)}
-                                style={{
-                                    padding: "14px",
-                                    background: "#111",
-                                    border: "1px solid #333",
-                                    color: "#fff",
-                                    cursor: "pointer",
-                                    height: "50px",
-                                    textAlign: "center"
-                                }}
-                            >
+                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
+                        {shuffledQuestions[currentQ].options.map((opt, i) => (
+                            <button key={i} disabled={!!attacking} onClick={() => handleAnswer(i)}
+                                style={{ padding: "14px", background: "#111", border: "1px solid #333", color: "#fff", cursor: "pointer", height: "50px", textAlign: "center" }}>
                                 {opt}
                             </button>
                         ))}
@@ -432,33 +242,16 @@ const QuizShogun = () => {
                 </div>
             ) : (
                 <div style={{ marginTop: "30px", textAlign: "center" }}>
-                    <h2
-                        style={{
-                            fontSize: "3rem",
-                            color: playerHP > 0 ? "#4facfe" : "#f093fb",
-                        }}
-                    >
+                    <h2 style={{ fontSize: "3rem", color: playerHP > 0 ? "#4facfe" : "#f093fb" }}>
                         {playerHP > 0 ? "VICTORY" : "DEFEATED"}
                     </h2>
-
-                    <button
-                        onClick={() => window.location.reload()}
-                        style={{
-                            padding: "10px 40px",
-                            background: "#fff",
-                            border: "none",
-                            cursor: "pointer",
-                            fontWeight: "bold",
-                            color: "black",
-                            fontSize: "22px"
-                        }}
-                    >
+                    <button onClick={() => window.location.reload()} style={{ padding: "10px 40px", background: "#fff", border: "none", cursor: "pointer", fontWeight: "bold", color: "black", fontSize: "22px" }}>
                         RETRY
                     </button>
                 </div>
             )}
         </div>
-    )
-}
+    );
+};
 
 export default QuizShogun;

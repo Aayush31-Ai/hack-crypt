@@ -116,6 +116,7 @@ const QUESTIONS = [
         explanation: "In Python, the integer 0 is considered 'Falsy', while any non-zero number is 'Truthy'.",
     }
 ];
+
 /* -------------------- PLATFORMS -------------------- */
 const PLATFORMS = [
     { x: 0, y: 450, width: 800, height: 50, color: "#8B4513" },
