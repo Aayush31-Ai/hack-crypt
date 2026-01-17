@@ -524,3 +524,5 @@ export default function Mario() {
         </div>
     );
 }
+
+export default Mario;
