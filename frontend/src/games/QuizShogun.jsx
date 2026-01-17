@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const QUESTIONS = [
     { q: "Which keyword declares a block-scoped variable that can be reassigned?", options: ["var", "let", "const", "static"], correct: 1 },
@@ -23,6 +24,7 @@ const QUESTIONS = [
 ];
 
 const QuizShogun = () => {
+    const navigate = useNavigate();
     const canvasRef = useRef(null);
     const [playerHP, setPlayerHP] = useState(100);
     const [botHP, setBotHP] = useState(100);
@@ -190,7 +192,15 @@ const QuizShogun = () => {
     }, [playerHP, botHP]);
 
     return (
-        <div style={{ minHeight: "100vh", background: "#000", color: "#fff", display: "flex", flexDirection: "column", alignItems: "center", padding: "max(16px, 5vw)", fontFamily: "monospace", fontSize: "clamp(14px, 3vw, 22px)", gap: "16px" }}>
+        <div style={{ minHeight: "100vh", background: "#000", color: "#fff", display: "flex", flexDirection: "column", alignItems: "center", padding: "max(16px, 5vw)", fontFamily: "monospace", fontSize: "clamp(14px, 3vw, 22px)", gap: "16px", position: "relative" }}>
+            {/* Back Button */}
+            <button 
+                onClick={() => navigate('/')} 
+                style={{ position: "absolute", top: "16px", left: "16px", background: "#222", border: "1px solid #444", color: "#fff", padding: "8px 16px", borderRadius: "4px", cursor: "pointer", fontSize: "14px", display: "flex", alignItems: "center", gap: "8px" }}
+            >
+                ← Back
+            </button>
+            
             <h1 style={{ color: "#ffd700", letterSpacing: "8px", marginBottom: "16px", fontSize: "clamp(20px, 6vw, 40px)", textAlign: "center" }}>QUIZ SHOGUN</h1>
 
             {/* HUD */}

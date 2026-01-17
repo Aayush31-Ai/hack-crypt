@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { X, CheckCircle, XCircle, Trophy } from 'lucide-react';
+import { X, CheckCircle, XCircle, Trophy, ArrowLeft } from 'lucide-react';
 import CurrentUser from '../../playerData/CurrentUser';
 
 const ChallengeQuiz = ({ challenge, onComplete, onClose }) => {
@@ -152,6 +152,15 @@ const ChallengeQuiz = ({ challenge, onComplete, onClose }) => {
   return (
     <div className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center z-50 p-4 sm:p-6">
       <div className="bg-[#0b1220] border border-white/20 rounded-2xl p-6 sm:p-8 max-w-2xl w-full relative max-h-[90vh] overflow-y-auto">
+        {/* Back Button */}
+        <button
+          onClick={onClose}
+          className="absolute top-3 left-3 sm:top-4 sm:left-4 text-gray-400 hover:text-white transition-colors flex items-center gap-1 text-sm"
+        >
+          <ArrowLeft size={20} />
+          <span className="hidden sm:inline">Back</span>
+        </button>
+        
         {/* Close Button */}
         <button
           onClick={onClose}

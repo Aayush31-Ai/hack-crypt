@@ -2,6 +2,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { worldsData } from "../data/worldData";
 import { useState, useEffect } from "react";
 import { completeStage, saveQuizScore, getPlayerData, updatePlayerXP } from "../services/localStorage";
+import { ArrowLeft } from "lucide-react";
 
 const QuizPage = () => {
   const { worldId, zoneId, stageId } = useParams();
@@ -44,9 +45,18 @@ const QuizPage = () => {
 
   return (
     <div className="min-h-screen bg-[radial-gradient(60%_60%_at_20%_10%,_rgba(177,158,239,0.12),_transparent_60%),radial-gradient(50%_50%_at_80%_20%,_rgba(177,158,239,0.08),_transparent_55%),linear-gradient(135deg,_#05060b_0%,_#0b0f1a_45%,_#05060b_100%)] text-white flex items-center justify-center p-4 sm:p-6 lg:p-8">
-      <div className="w-full max-w-xl bg-white/5 border border-white/10 rounded-xl p-6 sm:p-8 max-h-[90vh] overflow-y-auto">
+      <div className="w-full max-w-xl bg-white/5 border border-white/10 rounded-xl p-6 sm:p-8 max-h-[90vh] overflow-y-auto relative">
+        
+        {/* Back Button */}
+        <button
+          onClick={() => navigate(`/world/${worldId}`)}
+          className="absolute top-4 left-4 sm:top-6 sm:left-6 text-gray-400  hover:text-white transition-colors flex items-center gap-1 text-sm z-10"
+        >
+          <ArrowLeft size={20} />
+          <span className="hidden sm:inline">Back</span>
+        </button>
 
-        <h1 className="text-xl sm:text-2xl font-bold mb-2">
+        <h1 className="text-xl sm:text-2xl mt-4 font-bold mb-2 ml-16 sm:ml-0">
           {stage.name} – Quiz
         </h1>
 
