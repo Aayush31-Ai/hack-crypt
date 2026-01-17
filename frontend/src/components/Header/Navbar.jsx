@@ -14,7 +14,9 @@ export default function Navbar() {
             <nav className="bg-[#0b1220] text-white px-6 py-4 flex items-center justify-around overflow-visible relative z-50">
                 {/* Left: Logo */}
                 <div className="">
-                    <img className="w-[200px] h-12 bg-none scale-125" src="/assets/png&gif/png/logo-purple.png" alt="" />
+                    <Link to="/">
+                        <img className="w-[200px] h-12 bg-none scale-125" src="/assets/png&gif/png/logo-purple.png" alt="" />
+                    </Link>
                 </div>
 
                 {/* Center: Menu */}
