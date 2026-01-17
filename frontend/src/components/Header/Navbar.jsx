@@ -26,7 +26,7 @@ export default function Navbar() {
 
     return (
         <>
-            <nav className="bg-[#0b1220] text-white px-4 sm:px-6 py-4 flex items-center justify-between overflow-visible relative z-50">
+            <nav className="bg-[#0b1220] text-white px-4 sm:px-20 py-4 flex items-center justify-between overflow-visible relative z-50">
                 {/* Left: Logo */}
                 <Link to="/" className="flex-shrink-0">
                     <img className="w-[140px] sm:w-[200px] h-10 sm:h-12 bg-none sm:scale-125" src="/assets/png&gif/png/logo-purple.png" alt="Logo" />
