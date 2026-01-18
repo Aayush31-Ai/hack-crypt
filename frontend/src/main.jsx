@@ -33,7 +33,7 @@ const router = createBrowserRouter(
         <Route path="/world/:worldId" element={<WorldDetail />} />
         <Route path="/world/:worldId/zone/:zoneId/stage/:stageId" element={<QuizPage />} />
         <Route path='/leaderboard' element={<Leaderboard />} />
-        <Route path='/mario' element={<Mario />} />
+        
         <Route path='/quizshogun' element={<QuizShogun />} />
         <Route path='/teacher' element={<TeacherPanel />} />
 
